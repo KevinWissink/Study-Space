@@ -1,6 +1,6 @@
 /*
     File: server.js
-    Purpose: This is the back end of our application. It will handle the
+    Purpose: This is the backend of our application. It will handle the
         exchange of tokens and client secrets for Spotify and Google.
 */
 
@@ -22,11 +22,10 @@ let querystring = require("querystring");
 /*--------------------------------------------------------------------------*/
 // Loads the port number assigned by Heroku. If developing locally, load port 3000.
 const PORT = process.env.PORT || 3000;
-// Domains for our the back end and the front end.
-const DOMAIN_BACK_END = "http://localhost:3000";
-const DOMAIN_FRONT_END = "http://localhost:5500";
+// Domains for our the backend and the frontend.
+const DOMAIN_FRONT_END = process.env.DOMAIN_HEROKU || "http://localhost:5500";
 // The URI to redirect after user grants permission. This URI must be registered with Spotify.
-const REDIRECT_URI = DOMAIN_BACK_END + "/spotify/callback/";
+const REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI || "http://localhost:3000/api/spotify/callback/";
 
 
 /**
@@ -45,7 +44,7 @@ const REDIRECT_URI = DOMAIN_BACK_END + "/spotify/callback/";
  * playlist-read-private: For getting the user's private playlists.
  * playlist-read-collaborative: For getting the user's "Collaborative" playlists.
  */
-app.get("/spotify/login/", (req, res) => {
+app.get("/api/spotify/login/", (req, res) => {
     // Parameters for authorization.
     let authEndpoint = "https://accounts.spotify.com/authorize";
     let responseType = "code";
@@ -67,7 +66,7 @@ app.get("/spotify/login/", (req, res) => {
  * If the user granted permission, exchange for access and refresh tokens and redirect back to site.
  * Otherwise, redirect the user back to the landing page.
  */
-app.get("/spotify/callback/", (req, res) => {
+app.get("/api/spotify/callback/", (req, res) => {
     // The case where user denied our application permission.
     if (req.query.hasOwnProperty("error")) {
         // Redirect the user back to the landing page.
@@ -101,11 +100,11 @@ app.get("/spotify/callback/", (req, res) => {
 });
 
 /**
- * Used to refresh an expired access token using the refresh token. The request to this back end function
- * is made by the front end. This function then returns the response from Spotify as a response to the original
- * request from the front end. The response will contain a new access token and possibly a 
+ * Used to refresh an expired access token using the refresh token. The request to this backend function
+ * is made by the frontend. This function then returns the response from Spotify as a response to the original
+ * request from the frontend. The response will contain a new access token and possibly a 
  */
-app.get("/spotify/refresh/", (req, res) => {
+app.get("/api/spotify/refresh/", (req, res) => {
     // Encode the client ID and secret.
     let encodedCredentials = Buffer.from(
         process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET, "utf8").toString("base64");

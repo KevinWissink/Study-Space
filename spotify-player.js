@@ -6,9 +6,8 @@ let spotifyPlayerID = null;
 const ACCESS_TOKEN = "access_token";
 const REFRESH_TOKEN = "refresh_token";
 
-// Domains for our the back end and the front end.
-const DOMAIN_BACK_END = "http://localhost:3000";
-const DOMAIN_FRONT_END = "http://localhost:5500";
+// Domains for our the backend and the frontend.
+const DOMAIN_BACK_END = "https://study-space-tamu.herokuapp.com";
 
 // Takes as parameter a URL and returns a JSON of the extracted query parameters.
 function queryURLToJSON(string) {
@@ -22,7 +21,7 @@ function spotifyLogout() {
     localStorage.removeItem(REFRESH_TOKEN);
 
     // Redirect to landing page.
-    window.location.replace(DOMAIN_FRONT_END + "/index.html");
+    window.location.replace("./index.html");
 }
 
 /**
@@ -118,15 +117,15 @@ function spotifyPlay() {
 }
 
 /**
- * In order to refresh our access token, we must make a POST request to Spotify from our back end
+ * In order to refresh our access token, we must make a POST request to Spotify from our backend
  * since it involves sending our client ID and secret.
- * Therefore, this function makes a HTTP request to our back end which then executes a POST request to
- * Spotify. Upon getting the response, the back end simply returns the response from Spotify as a response
+ * Therefore, this function makes a HTTP request to our backend which then executes a POST request to
+ * Spotify. Upon getting the response, the backend simply returns the response from Spotify as a response
  * to our HTTP request in this function. The response will contain a newly refreshed access token and possibly
  * a new refresh token which we then store in localStorage.
  */
 function spotifyRefresh() {
-    // Query parameters for making a request to the back end server.
+    // Query parameters for making a request to the backend server.
     const refreshEndpoint = DOMAIN_BACK_END + "/spotify/refresh/";
     const refreshToken = localStorage.getItem(REFRESH_TOKEN);
 

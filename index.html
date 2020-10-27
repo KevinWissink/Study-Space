@@ -5,17 +5,12 @@
   <title>Study Space</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="spotify-login.js"></script>
+  <script src="index.js"></script>
   <link rel="stylesheet" href="timer.css"></link>
 </head>
 
 <body>
-  <button id="spotify-login">Login</button>
-  <script type="text/javascript">
-    document.getElementById("spotify-login").onclick = () => {
-      window.location.replace("http://localhost:3000/spotify/login");
-    }
-  </script>
+  <button id="spotify-login" onclick="spotifyLogin();">Login</button>
 
   <p id="timer-paragraph">
     <table id="timer-table" class="table">
