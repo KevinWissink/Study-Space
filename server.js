@@ -133,7 +133,7 @@ app.get("/api/spotify/refresh/", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-    res.send(index.html);
+    res.send("index.html");
 });
 
 app.listen(PORT, () => {
