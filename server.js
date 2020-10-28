@@ -16,7 +16,7 @@ require("dotenv").config();
 let axios = require("axios");
 // To convert JSON to strings when letructing parameters.
 let querystring = require("querystring");
-
+let lib = require('fs');
 /*--------------------------------------------------------------------------*/
 /* GLOBAL VARIABLES */
 /*--------------------------------------------------------------------------*/
@@ -133,7 +133,14 @@ app.get("/api/spotify/refresh/", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-    res.send(index.html);
+    lib.readFile('./index.html', function (err, html) {
+    if (err) {
+        throw err; 
+    }       
+        res.writeHeader(200, {"Content-Type": "text/html"});  
+        res.write(html);  
+        res.end(); 
+});
 });
 
 app.listen(PORT, () => {
