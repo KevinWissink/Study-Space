@@ -1,0 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap");
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    /*background: #f6f6f6;*/
+    margin: 0;
+}
+
+p {
+    background-color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+    margin: 0;
+}
+
+.table {
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+    background: #ddd;
+    border: 1px solid #999;
+    box-shadow: 0 0 5px 3px #ccc;
+    padding: 10px;
+    width: 700px;
+}
+
+#timer-table-label {
+    font-size: 70px;
+}
+
+#timer-table-header {
+    font-size: 35px;
+    color: #2e2e2e;
+}
+
+.timer-table-row {
+    font-size: 45px;
+}
+
+.timer-table-row-name {
+    font-style: italic;
+}
+
+.timer-button {
+    
+}

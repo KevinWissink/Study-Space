@@ -1,3 +1,13 @@
+// Wait for the DOM to finish loading to add events for the buttons.
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("spotify-start-button").addEventListener("click", spotifyPlay);    
+    document.getElementById("playback-previous-button").addEventListener("click", playbackPrevious);    
+    document.getElementById("playback-toggle-button").addEventListener("click", playbackToggle);    
+    document.getElementById("playback-next-button").addEventListener("click", playbackNext);    
+    document.getElementById("spotify-logout-button").addEventListener("click", spotifyLogout);    
+    document.getElementById("spotify-refresh-button").addEventListener("click", spotifyRefresh);    
+});
+
 // Will hold the Player Object.
 let spotifyPlayer = null;
 let spotifyPlayerID = null;
@@ -126,7 +136,7 @@ function spotifyPlay() {
  */
 function spotifyRefresh() {
     // Query parameters for making a request to the backend server.
-    const refreshEndpoint = DOMAIN_BACK_END + "/spotify/refresh/";
+    const refreshEndpoint = DOMAIN_BACK_END + "/api/spotify/refresh/";
     const refreshToken = localStorage.getItem(REFRESH_TOKEN);
 
     // Build the request URI.

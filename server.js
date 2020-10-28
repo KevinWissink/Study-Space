@@ -16,14 +16,14 @@ require("dotenv").config();
 let axios = require("axios");
 // To convert JSON to strings when letructing parameters.
 let querystring = require("querystring");
-let lib = require('fs');
+
 /*--------------------------------------------------------------------------*/
 /* GLOBAL VARIABLES */
 /*--------------------------------------------------------------------------*/
 // Loads the port number assigned by Heroku. If developing locally, load port 3000.
 const PORT = process.env.PORT || 3000;
 // Domains for our the backend and the frontend.
-const DOMAIN_FRONT_END = process.env.DOMAIN_HEROKU || "http://localhost:5500";
+const DOMAIN_FRONT_END = process.env.DOMAIN_HEROKU || "http://localhost:3000";
 // The URI to redirect after user grants permission. This URI must be registered with Spotify.
 const REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI || "http://localhost:3000/api/spotify/callback/";
 
@@ -132,16 +132,7 @@ app.get("/api/spotify/refresh/", (req, res) => {
     });
 });
 
-app.get("/", (req, res) => {
-    lib.readFile('./index.html', function (err, html) {
-    if (err) {
-        throw err; 
-    }       
-        res.writeHeader(200, {"Content-Type": "text/html"});  
-        res.write(html);  
-        res.end(); 
-});
-});
+app.use(express.static(__dirname));
 
 app.listen(PORT, () => {
     console.log("Listening to " + PORT);

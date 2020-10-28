@@ -1,11 +1,20 @@
+// Variables for UI elements.
+let timerTable = null;
+let addTimerButton = null;
+
+// Wait for the DOM to finish loading to add events for the buttons.
+document.addEventListener("DOMContentLoaded", () => {
+    addTimerButton = document.getElementById("add-timer-5min");
+    timerTable = document.getElementById("timer-table");
+
+    addTimerButton.addEventListener("click", () => { addTimer("timer", 0, 5, 0) });
+});
+
 // https://www.youtube.com/watch?v=x7WJEmxNlEs
 const maxNumTimers = 5;
 const maxTimeInSecs = 86400; // a day
 var numActiveTimers = 0;
-const timerTable = document.getElementById('timer-table');
 const numCols = 4;
-const addTimerButton = document.getElementById('add-timer-5min');
-addTimerButton.addEventListener('click', function(){addTimer('timer', 0, 5, 0)} );
 
 setInterval(updateTimer, 1000);
 
@@ -33,7 +42,7 @@ function updateTimer()
             if (col < 0) col = 59;
             else decrementNextColOver = false;
 
-            if (col < 10) col = '0' + col;
+            if (col < 10) col = "0" + col;
 
             row.cells[j].innerHTML = col;
 
@@ -51,14 +60,14 @@ function addTimer(name, hours, mins, secs)
 
         timerTable.insertRow(numActiveTimers+2);
         const newRow = timerTable.rows[numActiveTimers+2];
-        newRow.className = 'timer-table-row';
+        newRow.className = "timer-table-row";
 
         let hours = Math.floor(totalSecs / 3600);
-        if (hours < 10) hours = '0' + hours;
+        if (hours < 10) hours = "0" + hours;
         let minutes = Math.floor((totalSecs % 3600) / 60);
-        if (minutes < 10) minutes = '0' + minutes;
+        if (minutes < 10) minutes = "0" + minutes;
         let seconds = totalSecs % 60;
-        if (seconds < 10) seconds = '0' + seconds;
+        if (seconds < 10) seconds = "0" + seconds;
 
         for (var i = 0; i < numCols; i++)
         {
@@ -66,7 +75,7 @@ function addTimer(name, hours, mins, secs)
             switch(i)
             {
                 case 0:
-                    newCell.className = 'timer-table-row-name';
+                    newCell.className = "timer-table-row-name";
                     newCell.innerHTML = name;
                     break;
                 case 1:

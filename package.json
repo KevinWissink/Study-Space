@@ -7,10 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.tamu.edu/Kevinwissink/Project3.git"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",

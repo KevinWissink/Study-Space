@@ -3,14 +3,17 @@
 
 <head>
   <title>Study Space</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src-elem 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com">
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src 'self';font-src 'self'; img-src 'self' data: https:; style-src 'self' ; script-src 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="timer.css"></link>
   <script src="index.js"></script>
+  <script src="timer.js"></script>
 </head>
 
 <body>
-  <button id="spotify-login" onclick="spotifyLogin();">Login</button>
+  <button id="spotify-login-button">Login</button>
 
   <p id="timer-paragraph">
     <table id="timer-table" class="table">
@@ -36,7 +39,6 @@
       </tr>
     </table>
   </p>
-
 </body>
 
 </html>
