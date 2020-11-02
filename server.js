@@ -40,6 +40,7 @@ const REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI || "http://localhost:3000/
  * streaming: for Playback SDK
  * user-read-email: for Playback SDK
  * user-read-private: for Playback SDK
+ * user-read-playback-state: for Playback SDK
  * user-modify-playback-state: For all playback controls such as play, pause, next, previous, etc.
  * playlist-read-private: For getting the user's private playlists.
  * playlist-read-collaborative: For getting the user's "Collaborative" playlists.
@@ -48,7 +49,7 @@ app.get("/api/spotify/login/", (req, res) => {
     // Parameters for authorization.
     let authEndpoint = "https://accounts.spotify.com/authorize";
     let responseType = "code";
-    let scope = "streaming user-read-email user-read-private user-modify-playback-state playlist-read-private playlist-read-collaborative";
+    let scope = "streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state playlist-read-private playlist-read-collaborative";
 
     // Full authorization URL with parameters.
     let authorizeURL = authEndpoint + 

@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <button id="study-break-button">Go to Study Break</button>
     <title>Study Space Player</title>
     <link rel="icon" href="favicon.ico">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://sdk.scdn.co/spotify-player.js; connect-src 'self' https://api.spotify.com; frame-src https://sdk.scdn.co">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://sdk.scdn.co/spotify-player.js; connect-src 'self' https://api.spotify.com; frame-src https://sdk.scdn.co; img-src 'self' https://i.scdn.co">
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script src="spotify-player.js"></script>
   </head>
 
   <body>
     <h1>Welcome to Study Space!</h1>
-    
+    <img id="playback-cover-image" alt="Track cover art"> 
+    <h3 id="playback-track-label"></h3>
+    <h4 id="playback-artist-label"></h4>
+    <h6 id="playback-duration-label"></h6>
+
+    <button id="playback-shuffle-button">Toggle Shuffle</button>
+    <button id="playback-repeat-button">Repeat</button>
     <button id="spotify-start-button">Play Global Top 50</button>
     <button id="playback-previous-button">Previous</button>
     <button id="playback-toggle-button">Play/Pause</button>
