@@ -7,22 +7,58 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://sdk.scdn.co/spotify-player.js; connect-src 'self' https://api.spotify.com; frame-src https://sdk.scdn.co; img-src 'self' https://i.scdn.co">
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script src="spotify-player.js"></script>
+    <link rel="stylesheet" href="timer.css"></link>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"></link>
   </head>
 
   <body>
     <h1>Welcome to Study Space!</h1>
-    <img id="playback-cover-image" alt="Track cover art"> 
-    <h3 id="playback-track-label"></h3>
-    <h4 id="playback-artist-label"></h4>
-    <h6 id="playback-duration-label"></h6>
+    
+    <div id='spotify-player'>
+      <img id="playback-cover-image" alt="Track cover art"> 
+      <h3 id="playback-track-label"></h3>
+      <h4 id="playback-artist-label"></h4>
+      <h6 id="playback-duration-label"></h6>
 
-    <button id="playback-shuffle-button">Toggle Shuffle</button>
-    <button id="playback-repeat-button">Repeat</button>
-    <button id="spotify-start-button">Play Global Top 50</button>
-    <button id="playback-previous-button">Previous</button>
-    <button id="playback-toggle-button">Play/Pause</button>
-    <button id="playback-next-button">Next</button>
-    <button id="spotify-logout-button">Logout</button>
-    <button id="spotify-refresh-button">Refresh Token</button>
+      <button id="playback-shuffle-button" class="button">Toggle Shuffle</button>
+      <button id="playback-repeat-button" class="button">Repeat</button>
+      <button id="spotify-start-button" class="button">Play Global Top 50</button>
+      <button id="playback-previous-button" class="button">Previous</button>
+      <button id="playback-toggle-button" class="button">Play/Pause</button>
+      <button id="playback-next-button" class="button">Next</button>
+      <button id="spotify-logout-button" class="button">Logout</button>
+      <button id="spotify-refresh-button" class="button">Refresh Token</button>
+    </div>
+
+    <div id="timer-menu">
+      <table id="timer-table" class="table">
+        <tr id="timer-table-title">
+          <td colspan="8">TIMERS</td>
+        </tr>
+        <!--
+        <tr id="timer-table-header">
+          <td><i>Controls</i></td>
+          <td><i>Name</i></td>
+          <td>Hours</td>
+          <td></td>
+          <td>Minutes</td>
+          <td></td>
+          <td>Seconds</td>
+        </tr>
+        -->
+        <tr class="timer-table-button-row">
+          <td colspan="8">
+            <button id="5min-button" class="button add-timer-button">5 min</button>
+            <button id="15min-button" class="button add-timer-button">15 min</button>
+            <button id="30min-button" class="button add-timer-button">30 min</button>
+            <button id="1hr-button" class="button add-timer-button">1 hr</button>
+            <button id="1.5hr-button" class="button add-timer-button">1.5 hr</button>
+            <button id="2hr-button" class="button add-timer-button">2 hr</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <script src="timer.js"></script>
+    
   </body>
 </html>

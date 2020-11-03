@@ -1,50 +1,153 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
 body {
-    font-family: 'Montserrat', sans-serif;
-    /*background: #f6f6f6;*/
     margin: 0;
 }
 
-p {
-    background-color: #fff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 50px;
-    margin: 0;
+h1 {
+    font-family: 'Montserrat', sans-serif;
+    margin: 1%;
+}
+
+.button {
+    background-color: #dddddd;
+    font-family: 'Roboto', sans-serif;
+    color: #2e2e2e;
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+    padding: 0.3em 0.6em;
+    border: 0.1em solid #999999;
+    border-radius: 0.3em;
+    box-sizing: border-box;
+    transition: all 0.2s;
+}
+.button:hover {
+    color: #000000;
+    background-color: #ebebeb;
+    border-color: #5e5e5e;
+}
+.button:focus {
+    color: #000000;
+    background-color: #ebebeb;
+    border-color: #5e5e5e;
+}
+.button:active {
+    transform: scale(0.90);
+}
+.button:disabled {
+    color: #747474;
+    border-color: #999999;
+    background-color: #bdbdbd;
+}
+
+/***** TIMER MENU *****/
+
+div#timer-menu {
+    position: fixed;
+    display: block;
+    top: 2%;
+    height: 75%;
+    margin-right: 1%;
+    margin-left: 60%;
+    text-align: center;
+    /*top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);*/
 }
 
 .table {
-    position:absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    table-layout: auto;
     text-align: center;
-    background: #ddd;
-    border: 1px solid #999;
-    box-shadow: 0 0 5px 3px #ccc;
-    padding: 10px;
-    width: 700px;
+    color: #2e2e2e;
+    background-color: #dddddd;
+    border: 1px solid #999999;
+    /*box-shadow: 0 0 5px 3px #ccc;*/
+    padding: 30px 50px;
+    width: auto;
 }
 
-#timer-table-label {
-    font-size: 70px;
+table#timer-table {
+    /*height: 100%;*/
 }
 
-#timer-table-header {
-    font-size: 35px;
+table#timer-table>tr>td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+#timer-table-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 50px;
     color: #2e2e2e;
 }
 
-.timer-table-row {
-    font-size: 45px;
+#timer-table-header {
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    color: #2e2e2e;
 }
 
-.timer-table-row-name {
+.timer-table-timer-row {
+    font-family: 'Roboto', sans-serif;
+    font-size: 32px;
+}
+
+.timer-table-timer-row-name {
     font-style: italic;
+    font-weight: 600;
+    width: 7em;
 }
 
-.timer-button {
-    
+.timer-table-timer-row-value {
+    width: 1.8em;
+    font-size: 35px;
+}
+
+tr.timer-table-timer-row>td {
+    padding-top: 0.4em;
+}
+
+.timer-table-timer-row.timeout>td:not(.control-timer-button) {
+    color: #e95454;
+    animation: opacityPulse 2s ease-out;
+    animation-iteration-count: infinite;
+}
+@keyframes opacityPulse {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.button.add-timer-button {
+    width: 9em;
+    margin: 0.5em;
+}
+
+.button.control-timer-button {
+    width: 6em;
+    height: 2em;
+    margin-right: 0.3em;
+}
+
+/***** SPOTIFY PLAYER *****/
+
+div#spotify-player {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #dddddd;
+    border: 1px solid #999999;
+}
+
+div#spotify-player>button {
+    margin: 15px 20px;
 }
