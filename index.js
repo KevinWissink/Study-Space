@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // The endpoint of the backend server to start the login process with Spotify.
-const SPOTIFY_LOGIN_ENDPOINT = "http://localhost:3000/api/spotify/login";
+const SPOTIFY_LOGIN_ENDPOINT = "https://study-space-tamu.herokuapp.com/api/spotify/login";
 
 // Starts the login process when the login button is pressed.
 function spotifyLogin() {
