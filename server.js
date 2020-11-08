@@ -25,8 +25,8 @@ const PORT = process.env.PORT || 3000;
 // Domains for our the backend and the frontend.
 const DOMAIN_FRONT_END = process.env.DOMAIN_HEROKU || "http://localhost:3000";
 // The URI to redirect after user grants permission. This URI must be registered with Spotify.
-const REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI || "http://localhost:3000/api/spotify/callback/";
-
+const SPOTIFY_REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI || "http://localhost:3000/api/spotify/callback/";
+const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || "http://localhost:3000/api/google/callback/";
 
 /**
  * User is redirected here after clicking a login button. This method will simply
@@ -55,7 +55,7 @@ app.get("/api/spotify/login/", (req, res) => {
     let authorizeURL = authEndpoint + 
             "?client_id=" + encodeURIComponent(process.env.SPOTIFY_CLIENT_ID) + 
             "&response_type=" + responseType + 
-            "&redirect_uri=" + encodeURIComponent(REDIRECT_URI) +
+            "&redirect_uri=" + encodeURIComponent(SPOTIFY_REDIRECT_URI) +
             "&scope=" + encodeURIComponent(scope);
 
     // Redirects the user to grant our application permission.
@@ -84,7 +84,7 @@ app.get("/api/spotify/callback/", (req, res) => {
             data: querystring.stringify({
                 grant_type: "authorization_code",
                 code: req.query.code,
-                redirect_uri: REDIRECT_URI
+                redirect_uri: SPOTIFY_REDIRECT_URI
             }),
             headers: {
                 "Authorization": "Basic " + encodedCredentials,
@@ -93,7 +93,7 @@ app.get("/api/spotify/callback/", (req, res) => {
             }
         }).then(response => {
             // Redirect the user back to the "homepage" <domain.com/> with the response data as query parameters.
-            res.redirect(DOMAIN_FRONT_END + "/spotify-player.html?" + querystring.stringify(response.data));
+            res.redirect(DOMAIN_FRONT_END + "/redirect.html?from=spotify&" + querystring.stringify(response.data));
         }).catch(error => {
             console.log(error);
         });
@@ -133,6 +133,60 @@ app.get("/api/spotify/refresh/", (req, res) => {
     });
 });
 
+/**
+ * User is redirect here upon clicking the Google login button.
+ * This method simply builds the authorization request and brings up the Google popup.
+ */
+app.get("/api/google/login/", (req, res) => {
+    let authEndpoint = "https://accounts.google.com/o/oauth2/v2/auth";
+    let clientID = process.env.GOOGLE_CLIENT_ID;
+    let responseType = "code";
+    let scopes = "https://www.googleapis.com/auth/calendar";
+    let accessType = "offline";
+
+    // Build the authorization endpoint.
+    let authURL = authEndpoint + 
+            "?client_id=" + encodeURIComponent(clientID) +
+            "&redirect_uri=" + encodeURIComponent(GOOGLE_REDIRECT_URI) +
+            "&response_type=" + encodeURIComponent(responseType) +
+            "&scope=" + encodeURIComponent(scopes) +
+            "&access_type=" + encodeURIComponent(accessType);
+
+    // Redirects the user to grant our application permission.
+    res.redirect(authURL);
+});
+
+app.get("/api/google/callback/", (req, res) => {
+    // The case where user denied our application permission.
+    if (req.query.hasOwnProperty("error")) {
+        // Redirect the user back to the landing page.
+        res.redirect(DOMAIN_FRONT_END + "/index.html");
+    } else if (req.query.hasOwnProperty("code")) {
+        // Build an Axios POST request to exchange our code key for access tokens and refresh token.
+        axios({
+            method: "post",
+            url: "https://oauth2.googleapis.com/token",
+            data: querystring.stringify({
+                client_id: process.env.GOOGLE_CLIENT_ID,
+                client_secret: process.env.GOOGLE_CLIENT_SECRET,
+                code: req.query.code,
+                grant_type: "authorization_code",
+                redirect_uri: GOOGLE_REDIRECT_URI
+            }),
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        }).then(response => {
+            // Redirect the user back to the "homepage" <domain.com/> with the response data as query parameters.
+            res.redirect(DOMAIN_FRONT_END + "/redirect.html?from=google&" + querystring.stringify(response.data));
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+});
+
+// Serves the static HTML pages.
 app.use(express.static(__dirname));
 
 app.listen(PORT, () => {

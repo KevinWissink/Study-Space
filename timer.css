@@ -136,18 +136,3 @@ tr.timer-table-timer-row>td {
     height: 2em;
     margin-right: 0.3em;
 }
-
-/***** SPOTIFY PLAYER *****/
-
-div#spotify-player {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    background-color: #dddddd;
-    border: 1px solid #999999;
-}
-
-div#spotify-player>button {
-    margin: 15px 20px;
-}

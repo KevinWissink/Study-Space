@@ -27,3 +27,6 @@ function fetch_dog(){
     })
     .catch(() => console.log("Can’t access " + durl + " response. Blocked by browser?"))
 }
+
+fetch_dog()
+fetch_affirmation()

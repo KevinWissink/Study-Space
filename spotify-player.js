@@ -9,6 +9,13 @@ let playbackPreviousButton = null;
 let playbackToggleButton = null;
 let playbackNextButton = null;
 
+let userPlaylistsSelect = null;
+let userPlaylistsButton = null;
+let presetPlaylistsSelect = null;
+let presetPlaylistsButton = null;
+
+let scrub = null;
+
 // Wait for the DOM to finish loading to add events for the buttons.
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("study-break-button").addEventListener("click", () => {
@@ -40,7 +47,42 @@ document.addEventListener("DOMContentLoaded", () => {
     playbackNextButton.addEventListener("click", playbackNext);
 
     document.getElementById("spotify-logout-button").addEventListener("click", spotifyLogout);    
-    document.getElementById("spotify-refresh-button").addEventListener("click", spotifyRefresh);    
+    document.getElementById("spotify-refresh-button").addEventListener("click", spotifyRefresh);
+
+    userPlaylistsSelect = document.getElementById("user-playlists-select");
+    userPlaylistsButton = document.getElementById("user-playlists-button");
+    userPlaylistsButton.addEventListener("click", () => {
+        spotifyPlay(userPlaylistsSelect.value);
+    })
+
+    presetPlaylistsSelect = document.getElementById("preset-playlists-select");
+    presetPlaylistsButton = document.getElementById("preset-playlists-button");
+    presetPlaylistsButton.addEventListener("click", () => {
+        spotifyPlay(presetPlaylistsSelect.value);
+    })
+    
+    // Create the scrub object. Set the starting coordinates to 0.
+    scrub = {
+        el: document.getElementById("scrub"),
+        current: {
+            x: 0
+        },
+        last: {
+            x: 0
+        }
+    },
+    timeline = document.getElementById("timeline"),
+    mouseDown = false;
+    
+    scrub.el.onmousedown = () => {
+        mouseDown = true;
+        scrub.origin = timeline.offsetLeft;
+        scrub.last.x = scrub.el.offsetLeft;
+        return false;
+    };
+
+    // Add the user's playlists to the drop down menu.
+    spotifyPlaylists(updateUserPlaylistsUI);
 });
 
 /*--------------------------------------------------------------------------*/
@@ -55,29 +97,35 @@ let spotifyPlayerID = null;
 let spotifyShuffleState = false;
 // The repeat state of the player. 0 is off, 1 is repeat context, 2 is repeat track.
 let spotifyRepeatState = 0;
+// The total time in ms of the current track playing.
+let spotifyTrackTotalTime = 0;
+
+/*--------------------------------------------------------------------------*/
+/* SCRUB BAR VARIABLES */
+/*--------------------------------------------------------------------------*/
+
+// State if the scrubber has been clicked.
+let scrubberClicked = false;
 
 /*--------------------------------------------------------------------------*/
 /* CONSTANTS */
 /*--------------------------------------------------------------------------*/
 
 // Names of the stored variables in localStorage.
-const ACCESS_TOKEN = "access_token";
-const REFRESH_TOKEN = "refresh_token";
+const ACCESS_TOKEN = "spotify_access_token";
+const REFRESH_TOKEN = "spotify_refresh_token";
 
 // Domains for our the backend and the frontend.
 const DOMAIN_BACKEND = "https://study-space-tamu.herokuapp.com";
+
+/*--------------------------------------------------------------------------*/
+/* SPOTIFY PLAYER */
+/*--------------------------------------------------------------------------*/
 
 /**
  * Once the Playback SDK is ready, this method will execute.
  */
 window.onSpotifyWebPlaybackSDKReady = () => {
-    // Parse the query parameters from the URL.
-    let queryData = queryURLToJSON(window.location.href);
-
-    // Store the parsed access and refresh tokens in localStorage.
-    localStorage.setItem(ACCESS_TOKEN, queryData.access_token);
-    localStorage.setItem(REFRESH_TOKEN, queryData.refresh_token);
-
     // Create the Spotify Player Object.
     spotifyPlayer = new Spotify.Player({
       name: "Study Space Player",
@@ -110,13 +158,15 @@ window.onSpotifyWebPlaybackSDKReady = () => {
             artist += ", " + item.artists[i].name;
         }
         let trackTime = item.duration_ms;
-        let coverURL = item.album.images[0].url;
+        let coverURL = item.album.images[1].url;
 
         // Update the playback UI.
         upadtePlaybackUI(track, artist, trackTime, coverURL);
 
         // Update the shuffle state of the player.
         spotifyShuffleState = state.shuffle;
+        // Set the global variable for total track time.
+        spotifyTrackTotalTime = trackTime;
     });
     
     // Ready
@@ -141,21 +191,24 @@ function playbackToggle() {
 // Skips to previous song in the queue.
 function playbackPrevious() {
     spotifyPlayer.previousTrack().then(() => {
-        console.log("Previous!");
+
     });
 }
 
 // Skips to next song in the queue.
 function playbackNext() {
     spotifyPlayer.nextTrack().then(() => {
-        console.log("Next!");
+
     });
 }
 
-// Seek to a position.
-function playbackSeek() {
-    spotifyPlayer.seek(60 * 1000).then(() => {
-
+/**
+ * Seeks to a given position (ms) of the track.
+ * @param {number} seekTo The time in ms to seek the playback to. 
+ */
+function playbackSeek(seekTo) {
+    spotifyPlayer.seek(seekTo).then(() => {
+        console.log("Seeked to (ms): " + seekTo + ", (s): " + seekTo / 1000);
     });
 }
 
@@ -220,8 +273,28 @@ function upadtePlaybackUI(track, artist, trackTime, coverURL) {
     playbackCoverImage.src = coverURL;
 }
 
-// Get the user's playlists.
-function spotifyPlaylists() {
+/**
+ * Takes as parameter an array of the user's playlists, each of which is a playlist object.
+ * Adds an option in the drop-down menu UI for each of the user's playlist. 
+ * @param {array} playlists An array of JSON corresponding to the playlist object. 
+ */
+function updateUserPlaylistsUI(playlists) {
+    // Iterate through all of the user's playlists.
+    for (let i = 0; i < playlists.length; i++) {
+        // Construct the drop-down option.
+        let option = document.createElement("option");
+        option.value = playlists[i].uri;
+        option.text = playlists[i].name;
+        // Append the drop-down option to the drop-down menu.
+        userPlaylistsSelect.appendChild(option);
+    }
+}
+
+/**
+ * Makes an API call to return the user's playlists. This function also updates the UI by passing the reponse to the callback fucntion.
+ * @param {function} callback A function that takes as parameter the array of user playlists. This function will update the UI.
+ */
+function spotifyPlaylists(callback) {
     // Query parameters.
     const playlistsEndpoint = "https://api.spotify.com/v1/me/playlists";
 
@@ -233,7 +306,7 @@ function spotifyPlaylists() {
     xmlHTTP.setRequestHeader("Authorization", "Bearer " + localStorage.getItem(ACCESS_TOKEN));
     xmlHTTP.onreadystatechange = () => {
         if (xmlHTTP.readyState == 4 && xmlHTTP.status == 200) {
-            console.log(JSON.parse(xmlHTTP.response));
+            callback(JSON.parse(xmlHTTP.response).items);
         }
     }
     xmlHTTP.send();
@@ -295,7 +368,7 @@ function spotifyRefresh() {
     const refreshQuery = refreshEndpoint + 
             "?refresh_token=" + encodeURIComponent(refreshToken);
 
-            let xmlHTTP = new XMLHttpRequest();
+    let xmlHTTP = new XMLHttpRequest();
     xmlHTTP.open("GET", refreshQuery, true);
     xmlHTTP.onreadystatechange = () => {
         if (xmlHTTP.readyState == 4 && xmlHTTP.status == 200) {
@@ -312,6 +385,55 @@ function spotifyRefresh() {
     }
     xmlHTTP.send();
 }
+
+/*--------------------------------------------------------------------------*/
+/* SCRUB BAR */
+/*--------------------------------------------------------------------------*/
+
+// Upon clicking the mouse on the scrubber.
+document.onmousemove = (e) => {
+    if (mouseDown == true) {
+        // The scubber itself has been clicked on, change the state.
+        scrubberClicked = true;
+
+        var scrubStyle = getComputedStyle(scrub.el),
+            position = parseInt(scrubStyle.left, 10),
+            newPosition = position + (e.clientX - scrub.last.x),
+            timeStyle = getComputedStyle(timeline, 10),
+            timeWidth = parseInt(timeStyle.width, 10);
+
+        // If the scubber is trying to go negative, set it to 0.
+        if (e.clientX < timeline.offsetLeft) {
+            newPosition = 0;
+        } else if (e.clientX > timeWidth + timeline.offsetLeft) {
+            newPosition = timeWidth;
+        }
+
+        // Set the new x position in the scub object and visually move the scrubber to the new position.
+        scrub.current.x = newPosition;
+        scrub.el.style.left = newPosition + "px";
+        scrub.last.x = e.clientX;
+    }
+};
+
+// Releasing the mouse.
+document.onmouseup = () => {
+    mouseDown = false;
+
+    // Used to only seek the playback when the mouse up event followed a mouse click on the actual scubber.
+    if (scrubberClicked) {
+        // Get the current position of the scrubber and the width of the timeline.
+        let positionPX = scrub.current.x;
+        let timelineWidth = parseInt(getComputedStyle(timeline, 10).width, 10);
+        let seekTo = Math.floor((spotifyTrackTotalTime / timelineWidth) * positionPX);
+    
+        // Seek the playback to the new position.
+        playbackSeek(seekTo);
+
+        // Change the state of the scubber clicked back to false.
+        scrubberClicked = false;
+    }
+};
 
 /*--------------------------------------------------------------------------*/
 /* HELPER FUNCTIONS */

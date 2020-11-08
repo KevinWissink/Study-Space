@@ -7,8 +7,9 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://sdk.scdn.co/spotify-player.js; connect-src 'self' https://api.spotify.com; frame-src https://sdk.scdn.co; img-src 'self' https://i.scdn.co">
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script src="spotify-player.js"></script>
-    <link rel="stylesheet" href="timer.css"></link>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"></link>
+    <link rel="stylesheet" href="spotify-player.css">
+    <link rel="stylesheet" href="timer.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   </head>
 
   <body>
@@ -19,15 +20,35 @@
       <h3 id="playback-track-label"></h3>
       <h4 id="playback-artist-label"></h4>
       <h6 id="playback-duration-label"></h6>
+      
+      <!-- Credit - codepen.io -->
+      <div id="scrub-bar">
+        <div id="timeline">
+          <div id="scrub"></div>
+        </div>
+      </div>
 
-      <button id="playback-shuffle-button" class="button">Toggle Shuffle</button>
-      <button id="playback-repeat-button" class="button">Repeat</button>
-      <button id="spotify-start-button" class="button">Play Global Top 50</button>
-      <button id="playback-previous-button" class="button">Previous</button>
-      <button id="playback-toggle-button" class="button">Play/Pause</button>
-      <button id="playback-next-button" class="button">Next</button>
-      <button id="spotify-logout-button" class="button">Logout</button>
-      <button id="spotify-refresh-button" class="button">Refresh Token</button>
+      <div id="playback-controls-container">
+        <button id="playback-shuffle-button" class="button">Toggle Shuffle</button>
+        <button id="playback-repeat-button" class="button">Repeat</button>
+        <button id="spotify-start-button" class="button">Play Global Top 50</button>
+        <button id="playback-previous-button" class="button">Previous</button>
+        <button id="playback-toggle-button" class="button">Play/Pause</button>
+        <button id="playback-next-button" class="button">Next</button>
+        <button id="spotify-logout-button" class="button">Logout</button>
+        <button id="spotify-refresh-button" class="button">Refresh Token</button>
+      </div>
+
+      <div id="playback-playlists-container">
+        <select id="user-playlists-select"></select>
+        <button id="user-playlists-button" class="button">Play</button>
+        <select id="preset-playlists-select">
+          <option value="spotify:playlist:37i9dQZF1DX8NTLI2TtZa6">Intense Studying</option>
+          <option value="spotify:playlist:37i9dQZF1DX9sIqqvKsjG8">Instrumental Study</option>
+          <option value="spotify:playlist:4hI41e14omQt1xZBA4M1ID">Lofi Hip Hop Study Beats</option>
+        </select>
+        <button id="preset-playlists-button" class="button">Play</button>
+      </div>
     </div>
 
     <div id="timer-menu">
