@@ -11,4 +11,6 @@ function onSignIn(googleUser) {
     // The ID token you need to pass to your backend:
     var id_token = googleUser.getAuthResponse().id_token;
     console.log("ID Token: " + id_token);
+
+    let iframeSRC = `https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23ffffff&amp;ctz=America%2FChicago&amp;mode=AGENDA&amp;src=${profile.getEmail()}&amp;color=%237986CB&amp;showPrint=0&amp;showTabs=1&amp;showTz=0&amp;showDate=0&amp;showNav=0&amp;showTitle=0`;
 }
