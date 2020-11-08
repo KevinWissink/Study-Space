@@ -9,11 +9,37 @@
     <script src="spotify-player.js"></script>
     <link rel="stylesheet" href="spotify-player.css">
     <link rel="stylesheet" href="timer.css">
+    <link rel="stylesheet" href="calendar.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   </head>
 
   <body>
     <h1>Welcome to Study Space!</h1>
+
+    <div id="calendar">
+      <iframe
+        src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23ffffff&amp;ctz=America%2FChicago&amp;mode=AGENDA&amp;src=ZmFsbG91dGRheXNAZ21haWwuY29t&amp;color=%237986CB&amp;showPrint=0&amp;showTabs=1&amp;showTz=0&amp;showDate=0&amp;showNav=0&amp;showTitle=0"
+        id = "calendarFrame" frameborder="0" scrolling="no">
+      </iframe>
+
+      <div>
+        <!-- <button class="add-button" onclick="addButton()">Add Item</button> -->
+        <!-- <div class="form-popup" id="addForm">
+                      <form class="/action_page.php" class="form-container">
+                        <h1></h1>
+                      </form>
+                    </div> -->
+        <button>Add Item</button>
+        <button>Add Break</button>
+        <button>View Item</button>
+        <button>Remove Item</button>
+      </div>
+      <!-- <script>
+        function addButton() {
+          document.getElementById("addForm").style.display = "block";
+        }
+      </script> -->
+    </div>
     
     <div id='spotify-player'>
       <img id="playback-cover-image" alt="Track cover art"> 
