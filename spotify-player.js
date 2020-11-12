@@ -14,6 +14,7 @@ let userPlaylistsButton = null;
 let presetPlaylistsSelect = null;
 let presetPlaylistsButton = null;
 
+let scrubLine = null;
 let scrub = null;
 
 // Wait for the DOM to finish loading to add events for the buttons.
@@ -46,9 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
     playbackNextButton = document.getElementById("playback-next-button");
     playbackNextButton.addEventListener("click", playbackNext);
 
-    document.getElementById("spotify-logout-button").addEventListener("click", spotifyLogout);    
-    document.getElementById("spotify-refresh-button").addEventListener("click", spotifyRefresh);
-
     userPlaylistsSelect = document.getElementById("user-playlists-select");
     userPlaylistsButton = document.getElementById("user-playlists-button");
     userPlaylistsButton.addEventListener("click", () => {
@@ -70,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         last: {
             x: 0
         }
-    },
+    }
     timeline = document.getElementById("timeline"),
     mouseDown = false;
     
@@ -80,6 +78,14 @@ document.addEventListener("DOMContentLoaded", () => {
         scrub.last.x = scrub.el.offsetLeft;
         return false;
     };
+
+    // Create the scrub line object. This is the line that follows the scrubber along the timeline.
+    scrubLine = {
+        el: document.getElementById("scrub-line"),
+        current: {
+            width: 0
+        },
+    }
 
     // Add the user's playlists to the drop down menu.
     spotifyPlaylists(updateUserPlaylistsUI);
@@ -93,6 +99,8 @@ document.addEventListener("DOMContentLoaded", () => {
 let spotifyPlayer = null;
 let spotifyPlayerID = null;
 
+// The playback state, false for playing, true for paused.
+let spotifyIsPausedState = false;
 // The shuffle state of the player.
 let spotifyShuffleState = false;
 // The repeat state of the player. 0 is off, 1 is repeat context, 2 is repeat track.
@@ -158,11 +166,16 @@ window.onSpotifyWebPlaybackSDKReady = () => {
             artist += ", " + item.artists[i].name;
         }
         let trackTime = item.duration_ms;
-        let coverURL = item.album.images[1].url;
+        let coverURL = item.album.images[2].url;
+
+        // If the player is paused (false) or playing (true).
+        let isPaused = state.paused;
 
         // Update the playback UI.
-        upadtePlaybackUI(track, artist, trackTime, coverURL);
+        upadtePlaybackUI(track, artist, trackTime, coverURL, isPaused);
 
+        // Global variable for paused state.
+        spotifyIsPausedState = isPaused;
         // Update the shuffle state of the player.
         spotifyShuffleState = state.shuffle;
         // Set the global variable for total track time.
@@ -265,12 +278,19 @@ function playbackRepeat() {
  * @param {string} artist Name of the artist. If multiple, each separated by a comma.
  * @param {number} trackTime The total time of the track in ms.
  * @param {string} coverURL The URL of the track cover art.
+ * @param {boolean} isPaused True if the player is paused, false if the playback is playing.
  */
-function upadtePlaybackUI(track, artist, trackTime, coverURL) {
+function upadtePlaybackUI(track, artist, trackTime, coverURL, isPaused) {
     playbackTrackLabel.innerHTML = track;
     playbackArtistLabel.innerHTML = artist;
     playbackDurationLabel.innerHTML = formatTime(trackTime / 1000);
     playbackCoverImage.src = coverURL;
+
+    if (isPaused) {
+        playbackToggleButton.innerHTML = "play_circle_outline";
+    } else {
+        playbackToggleButton.innerHTML = "pause_circle_outline";
+    }
 }
 
 /**
@@ -413,6 +433,10 @@ document.onmousemove = (e) => {
         scrub.current.x = newPosition;
         scrub.el.style.left = newPosition + "px";
         scrub.last.x = e.clientX;
+
+        // Update the timeline to follow the scrubber.
+        scrubLine.current.width = newPosition + 10;
+        scrubLine.el.style.width = newPosition + 10 + "px";
     }
 };
 
@@ -434,6 +458,21 @@ document.onmouseup = () => {
         scrubberClicked = false;
     }
 };
+
+/**
+ * 
+ * @param {number} pixel The position in terms of pixel relative to the timeline to move the scrubber to. 
+ */
+function updateScrubUI(pixel) {
+    // Set the new x position in the scub object and visually move the scrubber to the new position.
+    scrub.last.x = scrub.current.x;
+    scrub.current.x = pixel;
+    scrub.el.style.left = pixel + "px";
+
+    // Update the timeline to follow the scrubber.
+    scrubLine.current.width = pixel + 10;
+    scrubLine.el.style.width = pixel + 10 + "px";
+}
 
 /*--------------------------------------------------------------------------*/
 /* HELPER FUNCTIONS */

@@ -2,10 +2,11 @@
     position: fixed;
     bottom: 0;
 
-    height: 30%;
-    width: 30%;
+    height: 9%;
+    width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
 
     background-color: #373737;
     border: #252525 ;
@@ -14,13 +15,15 @@
 }
 
 .spotify-button {
-    height: 50px;
-    width: 50px;
+    height: 30px;
+    width: 30px;
     margin: 5px 10px;
+    padding: 0;
 
     background-color: transparent;
     border: none;
     color: lightgray;
+    font-size: 12px;
     outline: none;
     overflow: none;
 }
@@ -36,19 +39,21 @@
 #playback-track-container {
     position: relative;
 
-    height: 60%;
-    width: 100%;
+    height: 100%;
+    width: 20%;
     display: flex;
     flex-direction: row;
 }
 
 #playback-cover-image {
-    height: 150px;
-    width: 150px;
-    margin: 15px 15px 0 15px;
+    height: 65%;
+    margin-top: 100%;
+    margin: auto 10px auto 15px;
 }
 
 #playback-info-container {
+    position: relative;
+
     height: 100%;
     width: 100%;
     display: flex;
@@ -56,20 +61,22 @@
     justify-content: center;
 }
 
-#playback-playing-now-label {
-    color: gray;
-    font-size: 12px;
-    margin: 0;
-}
-
 #playback-track-label {
-    font-size: 22px;
+    font-size: 14px;
     margin: 5px 0 0 0;
 }
 
 #playback-artist-label {
     color: gray;
+    font-size: 12px;
     margin: 10px 0 0 0;
+}
+
+#playback-media-container {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 #scrub-bar {
@@ -78,15 +85,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 0 0 0;
 }
 
 #playback-time-label {
     padding: 0 15px 0 0;
+
+    font-size: 12px;
 }
 
 #playback-duration-label {
     padding: 0 0 0 15px;
+
+    font-size: 12px;
 }
 
 #timeline {
@@ -101,6 +111,7 @@
     width: 0px;
 
     background-color: #1DB954;
+    border-radius: 10px;
 }
 
 #scrub {
@@ -120,8 +131,16 @@
 }
 
 #playback-controls-container {
-    height: 30%;
-    width: 80%;
-    text-align: center;
-    margin: 10px auto;
+    height: 50%;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+#playback-playlists-container {
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }

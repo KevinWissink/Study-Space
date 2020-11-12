@@ -7,27 +7,57 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://cors-anywhere.herokuapp.com; img-src 'self' https://images.dog.ceo">
   <link rel="stylesheet" href="study-break.css">
   <script src="study-break-scripts.js"></script>
+  <script src="study-break-modal.js"></script>
+  <script src="study-break-keyboard.js"></script>
 </head>
 
 <body>
-  <div class="column" id= dog_column>
+  <!-- Dog API Area -->
+  <div class="column" id= dog-column>
     <h2>Dog API</h2>
-    <div class="row" id="dog_toolbar">
-      <button id="dog_button">Fetch!</button>
-      <button id="dog_button">By Breed</button>
-      <button id="dog_button">Favorite</button>
+    <div class="row" id="dog-toolbar">
+      <button id="dog-fetch" accesskey="a">Fetch!</button>
+      <button id="dog-breed">By Breed</button>
+      <button id="dog-fav">Favorite</button>
     </div>
-    <div class="row" id="dog_image">
-      <img id="dog_result">
+    <div class="row" id="dog-image">
+      <img id="dog-result">
     </div>
   </div>
-  <div class="column" id=afirmation_column>
+
+  <!-- Right side Column for Afirmations and Spotify-->
+  <div class="column" id=afirmation-column>
+    <!-- Afirmation API Area-->
     <div class="affirmation row">
       <h2>Affirmation API</h2>
-      <button id="affirmation_button">Inspire</button>
-      <p id="affirmation_result">Have a Wonderful day</p>
+      <button id="affirmation-button">Inspire</button>
+      
+      <!-- help box content-->
+      <input id="help-button" type="submit" value="">
+      <!--<button id="help-button" type="submit" style="border: 0; background: transparent">
+        <img src="/images/help-button-picture.png" alt="help"/>
+      </button>-->
+      <div id="help-box" class="modal">
+        <div class="help-content">
+          <span class="close">&times;</span>
+          <h4>Spotify Keyboard Commands</h4>
+          <p>&#91;&uarr;&#93; ... Increase Volume</p>
+          <p>&#91;&darr;&#93; ... Decrease Volume</p>
+          <p>&#91;&larr;&#93; ... Previous Song</p>
+          <p>&#91;&rarr;&#93; ... Skip Song</p>
+          <h4>Study Break Keyboard Commands</h4>
+          <p>&#91;F Key&#93; ... Fetch Dog</p>
+          <p>&#91;B Key&#93; ... By Breed</p>
+          <p>&#91;V Key&#93; ... Favorite Dog</p>
+          <p>&#91;I Key&#93; ... Inspire Me</p>
+        </div>
+
+      </div>
+      <p id="affirmation-result">Have a Wonderful day</p>
     </div>
-    <div class="affirmation row" id="spotify_area">
+
+    <!-- Spotify API Area-->
+    <div class="affirmation row" id="spotify-area">
       <h2>Spotify API</h2>
       <a>this is where the Spotify player goes</a>
     </div>

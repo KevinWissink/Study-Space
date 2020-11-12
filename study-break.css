@@ -31,22 +31,67 @@ img {
     height: 47%;
 }
 
-#dog_column {
-    background-image: url(grass.jpg);
+#dog-column {
+    background-image: url('images/grass.jpg');
     background-size: cover;
 }
 
-#dog_toolbar {
+#dog-toolbar {
     padding: 1vh;
     display: flex;
     justify-content: space-evenly;
 }
 
-#dog_image {
+#dog-image {
     width: 100%;
     height: 85%;
 }
 
-#spotify_area{
+#spotify-area{
     background-color:#1DB954;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.help-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+input[type="submit"] {
+    border: 0;
+    background: url('images/help-button-picture.png') no-repeat;
+    width: 20px;
+    height: 20px;
 }
