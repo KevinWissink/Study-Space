@@ -1,138 +1,266 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import "theme.css";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
-body {
-    margin: 0;
-}
-
-h1 {
-    font-family: 'Montserrat', sans-serif;
-    margin: 1%;
-}
-
-.button {
-    background-color: #dddddd;
-    font-family: 'Roboto', sans-serif;
-    color: #2e2e2e;
-    font-size: 20px;
-    font-weight: 400;
-    text-align: center;
-    padding: 0.3em 0.6em;
-    border: 0.1em solid #999999;
-    border-radius: 0.3em;
-    box-sizing: border-box;
-    transition: all 0.2s;
-}
-.button:hover {
-    color: #000000;
-    background-color: #ebebeb;
-    border-color: #5e5e5e;
-}
-.button:focus {
-    color: #000000;
-    background-color: #ebebeb;
-    border-color: #5e5e5e;
-}
-.button:active {
-    transform: scale(0.90);
-}
-.button:disabled {
-    color: #747474;
-    border-color: #999999;
-    background-color: #bdbdbd;
-}
-
-/***** TIMER MENU *****/
-
+/***** GENERAL TIMER MENU *****/
 div#timer-menu {
-    position: fixed;
-    display: block;
-    top: 2%;
-    height: 75%;
-    margin-right: 1%;
-    margin-left: 60%;
+    height: 100%;
+    width: 26%;
     text-align: center;
-    /*top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);*/
+    padding: 0.1em 0;
+    
+    background-color: var(--color-secondary);
+    color: var(--color-text);
+
+    font-family: Circular, Helvetica, Arial, sans-serif;
+
+    overflow: hidden;
 }
 
-.table {
-    table-layout: auto;
+#timer-menu-title {
+    font-size: 2.8em;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/***** BOTH TIMER SUB-MENUS *****/
+#add-timer-menu > div, #active-timer-menu > div {
+    padding: 0 0.1em;
+}
+
+div.timer-menu-containers {
+    margin: auto 1.25em;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+}
+
+div#add-timer-menu, div#active-timer-menu {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: space-between;
+
+    color: var(--color-text);
     text-align: center;
-    color: #2e2e2e;
-    background-color: #dddddd;
-    border: 1px solid #999999;
-    /*box-shadow: 0 0 5px 3px #ccc;*/
-    padding: 30px 50px;
-    width: auto;
+}
+div#add-timer-menu > div, div#active-timer-menu > div {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: space-between;
 }
 
-table#timer-table {
-    /*height: 100%;*/
+#add-timer-menu-title, #active-timer-menu-title {
+    color: var(--color-text);
+    font-size: 2em;
+    padding: 0;
+    margin: 0;
+    height: 1.25em;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
-table#timer-table>tr>td {
-    vertical-align: middle;
+/***** ADD TIMER SUB-MENU *****/
+#add-timer-menu-title {
+    margin-bottom: -0.2em;
+}
+
+div#add-timer-menu {
+    overflow-y: hidden;
+    overflow-x: auto;
+    height: auto;
+}
+
+div#add-timer-menu form {
+    width: 100%;
+    margin-bottom: 0.3em;
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: space-between;
+
+    color: var(--color-text);
     text-align: center;
 }
 
-#timer-table-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 50px;
-    color: #2e2e2e;
+div.form-inputs {
+    width: 100%;
+    padding: 0 0.9%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: space-around;
 }
 
-#timer-table-header {
-    font-family: 'Roboto', sans-serif;
-    font-size: 20px;
-    color: #2e2e2e;
+div#add-timer-menu > div {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+}
+div#add-timer-menu > div.preset-times-div {
+    margin-bottom: 0.45em;
 }
 
-.timer-table-timer-row {
-    font-family: 'Roboto', sans-serif;
-    font-size: 32px;
+div#add-timer-menu > div > label.checkbox-label {
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.timer-table-timer-row-name {
+#label-input {
+    width: 63%;
+}
+#hours-input, #minutes-input, #seconds-input {
+    width: 25%;
+}
+
+.timer-field {
+    height: 1.3em;
+    font-size: 1.2em;
+}
+.timer-field:valid {
+    
+}
+.timer-field:invalid {
+
+}
+
+.preset-time-button {
+    font-size: 1em;
+    font-weight: bold;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    line-height: 1.1em;
+    width: 28%;
+}
+
+#add-timer-symbol {
+    font-size: 3.5em;
+}
+
+#add-timer-button {
+    width: min-content;
+    height: min-content;
+    border: none;
+    border-radius: 10em;
+    background-color: transparent;
+    color: var(--color-tertiary);
+    margin-left: 4.5%;
+}
+
+#add-timer-button:hover {
+    cursor: pointer;
+}
+
+#add-timer-button:hover, #add-timer-button:focus, #add-timer-button:active {
+    color: var(--color-quaternary);
+    outline: none;
+}
+
+
+/***** ACTIVE TIMER SUB-MENU *****/
+div#active-timer-menu {
+    overflow-x: auto;
+    overflow-y: auto;
+    margin-bottom: 1em;
+    height: auto;
+}
+
+div#active-timer-menu > div {
+    margin: 0.25em 0;
+    font-size: 1.25em;
+}
+
+div.timer-controls, div.timer-values {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: space-between;
+}
+
+div.timer-controls {
+    width: 23%;
+    font-size: 0.75em;
+}
+
+div.timer-values {
+    width: 27%;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.timer-label {
+    width: 37%;
+    margin: 0 auto;
+    font-weight: normal;
     font-style: italic;
-    font-weight: 600;
-    width: 7em;
+    transition: none;
+    overflow-x: hidden;
+    padding: 0 0.1em;
 }
 
-.timer-table-timer-row-value {
-    width: 1.8em;
-    font-size: 35px;
+.timer-control-button span {
+    transition: none;
+    font-size: 2.65em;
 }
 
-tr.timer-table-timer-row>td {
-    padding-top: 0.4em;
+.timer-control-button {
+    width: min-content;
+    height: min-content;
+    padding: 0;
+    border: none;
+    border-radius: 10em;
+    background-color: transparent;
+    color: var(--color-tertiary);
 }
 
-.timer-table-timer-row.timeout>td:not(.control-timer-button) {
-    color: #e95454;
-    animation: opacityPulse 2s ease-out;
+.timer-control-button:hover {
+    cursor: pointer;
+}
+
+.timer-control-button:hover, .timer-control-button:focus, .timer-control-button:active {
+    color: var(--color-quaternary);
+    outline: none;
+}
+
+div.timer-values.timeout {
+    color: var(--color-accent);
+    animation: opacityPulse 1s ease-out;
     animation-iteration-count: infinite;
 }
 @keyframes opacityPulse {
     0% {
-        opacity: 0;
-    }
-    50% {
         opacity: 1;
     }
-    100% {
+    50% {
         opacity: 0;
     }
-}
-
-.button.add-timer-button {
-    width: 9em;
-    margin: 0.5em;
-}
-
-.button.control-timer-button {
-    width: 6em;
-    height: 2em;
-    margin-right: 0.3em;
+    100% {
+        opacity: 1;
+    }
 }

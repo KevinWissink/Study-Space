@@ -1,15 +1,14 @@
-#spotify-player {
-    position: fixed;
-    bottom: 0;
+@import "theme.css";
 
-    height: 30%;
-    width: 30%;
+#spotify-player {
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
 
-    background-color: #373737;
-    border: #252525 ;
-    color: white;
+    background-color: var(--color-secondary);
+    border: none;
+    color: var(--color-text);
     font-family: Circular, Helvetica, Arial, sans-serif;
 }
 
@@ -17,38 +16,51 @@
     height: 50px;
     width: 50px;
     margin: 5px 10px;
+    padding: 0;
 
     background-color: transparent;
     border: none;
-    color: lightgray;
+    color: var(--color-tertiary);
     outline: none;
     overflow: none;
 }
 
+.spotify-button.material-icons {
+    font-size: 28px;
+}
+
 .spotify-button:hover {
-    color: white;
+    cursor: pointer;
+}
+
+.spotify-button:hover, .spotify-button:focus, .spotify-button:active {
+    outline: none;
+    color: var(--color-quaternary);
 }
 
 #playback-toggle-button {
-    font-size: 30px;
+    font-size: 48px;
 }
 
 #playback-track-container {
     position: relative;
 
-    height: 60%;
+    height: 50%;
     width: 100%;
     display: flex;
     flex-direction: row;
 }
 
 #playback-cover-image {
-    height: 150px;
     width: 150px;
-    margin: 15px 15px 0 15px;
+    margin-top: 100%;
+    margin: 15px;
+    user-select: none;
 }
 
 #playback-info-container {
+    position: relative;
+
     height: 100%;
     width: 100%;
     display: flex;
@@ -56,20 +68,31 @@
     justify-content: center;
 }
 
-#playback-playing-now-label {
-    color: gray;
-    font-size: 12px;
-    margin: 0;
-}
-
 #playback-track-label {
-    font-size: 22px;
-    margin: 5px 0 0 0;
+    color: var(--color-text);
+    font-size: 26px;
+    margin: 5px 0 0 5px;
 }
 
 #playback-artist-label {
-    color: gray;
-    margin: 10px 0 0 0;
+    color: var(--color-text);
+    font-size: 22px;
+    margin: 10px 0 0 8px;
+    opacity: 50%;
+}
+
+#playback-media-container {
+    height: 35%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#playback-controls-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 #scrub-bar {
@@ -78,21 +101,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 0 0 0;
 }
 
 #playback-time-label {
     padding: 0 15px 0 0;
+    font-size: 13px;
+    transition: none;
 }
 
 #playback-duration-label {
     padding: 0 0 0 15px;
+    font-size: 13px;
+    transition: none;
 }
 
 #timeline {
     width: 75%;
     height: 8px;
-    background-color:#252525;
+    background-color: var(--color-primary);
     border-radius: 10px;
 }
 
@@ -100,28 +126,82 @@
     height: 8px;
     width: 0px;
 
-    background-color: #1DB954;
+    background-color: var(--color-accent);
+    border-radius: 10px;
 }
 
 #scrub {
     width: 20px;
     height: 20px;
-    background-color: #1DB954;
+    background-color: var(--color-accent);
     border-radius: 50%;
 
-    cursor: move;
+    cursor: ew-resize;
     position: relative;
     bottom: 5px;
-    left: -10px;
 }
 
 #scrub.active {
-    cursor: move;
+    cursor: ew-resize;
 }
 
-#playback-controls-container {
-    height: 30%;
-    width: 80%;
-    text-align: center;
-    margin: 10px auto;
+#playback-volume-container {
+    height: 15%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#volume-scrub-bar {
+    height: 10%;
+    width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#volume-down-label {
+    font-size: 19px;
+    padding: 0 10px 0 0;
+    transition: none;
+    user-select: none;
+}
+
+#volume-up-label {
+    font-size: 19px;
+    padding: 0 0 0 10px;
+    transition: none;
+    user-select: none;
+}
+
+#volume-timeline {
+    width: 50%;
+    height: 8px;
+    background-color:var(--color-primary);
+    border-radius: 10px;
+}
+
+#volume-scrub-line {
+    height: 8px;
+    width: 50%;
+    background-color: var(--color-accent);
+    border-radius: 10px;
+}
+
+#volume-scrub {
+    height: 10px;
+    width: 10px;
+    background-color: var(--color-accent);
+    border-radius: 50%;
+
+    cursor: ew-resize;
+    position: relative;
+    left: 97.5%;
+    bottom: 1px;
+}
+
+#volume-scrub.active {
+    cursor: ew-resize;
 }

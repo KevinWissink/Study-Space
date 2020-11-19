@@ -1,0 +1,25 @@
+.theme-light {
+    --color-primary: #c1c8cf;
+    --color-secondary: #e4e7eb;
+    --color-tertiary: #666e7a;
+    --color-quaternary: #353b42;
+    --color-accent: #4285F4;
+    --color-text: #1e2024;
+    --color-button: #5999ff;
+    
+    --color-google: #498fff;
+    --color-spotify: #33c967;
+}
+
+.theme-dark {
+    --color-primary: #111111;
+    --color-secondary: #373737;
+    --color-tertiary: #b9b9b9;
+    --color-quaternary: #ffffff;
+    --color-accent: #1DB954;
+    --color-text: #ffffff;
+    --color-button: #1DB954;
+
+    --color-google: #3380fd;
+    --color-spotify: #1DB954;
+}

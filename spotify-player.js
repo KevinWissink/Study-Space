@@ -2,6 +2,7 @@
 let playbackCoverImage = null;
 let playbackTrackLabel = null;
 let playbackArtistLabel = null;
+let playbackTimeLabel = null;
 let playbackDurationLabel = null;
 let playbackShuffleButton = null;
 let playbackRepeatButton = null;
@@ -16,20 +17,20 @@ let presetPlaylistsButton = null;
 
 let scrubLine = null;
 let scrub = null;
+let volumeScrubLine = null;
+let volumeScrub = null;
 
 // Wait for the DOM to finish loading to add events for the buttons.
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("study-break-button").addEventListener("click", () => {
-        window.location.href = "./study-break.html";
-    })
-
-    document.getElementById("spotify-start-button").addEventListener("click", () => {
-      spotifyPlay("spotify:playlist:37i9dQZEVXbMDoHDwVN2tF");  
-    });    
+    // If there is no volume value in cache, set it to default of 50%.
+    if (!localStorage.hasOwnProperty(VOLUME)) {
+        localStorage.setItem(VOLUME, 0.5);
+    }
 
     playbackCoverImage = document.getElementById("playback-cover-image");
     playbackTrackLabel = document.getElementById("playback-track-label");
     playbackArtistLabel = document.getElementById("playback-artist-label");
+    playbackTimeLabel = document.getElementById("playback-time-label");
     playbackDurationLabel = document.getElementById("playback-duration-label");
 
     playbackShuffleButton = document.getElementById("playback-shuffle-button");
@@ -70,10 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     timeline = document.getElementById("timeline"),
-    mouseDown = false;
     
     scrub.el.onmousedown = () => {
-        mouseDown = true;
+        scrubberClicked = true;
         scrub.origin = timeline.offsetLeft;
         scrub.last.x = scrub.el.offsetLeft;
         return false;
@@ -86,6 +86,35 @@ document.addEventListener("DOMContentLoaded", () => {
             width: 0
         },
     }
+    volumeTimeline = document.getElementById("volume-timeline");
+
+    // Create the volume scrub object.
+    volumeScrub = {
+        el: document.getElementById("volume-scrub"),
+        current: {
+            x: volumeTimeline.offsetWidth * localStorage.getItem(VOLUME)
+        },
+        last: {
+            x: volumeTimeline.offsetWidth * localStorage.getItem(VOLUME)
+        }
+    }
+    volumeScrub.el.style.left = volumeScrub.current.x + "px";
+    
+    volumeScrub.el.onmousedown = () => {
+        volumeScrubberClicked = true;
+        volumeScrub.origin = volumeTimeline.offsetLeft;
+        volumeScrub.last.x = volumeScrub.el.offsetLeft;
+        return false;
+    }
+
+    // Create the scrub line object. This is the line that follows the scrubber along the timeline.
+    volumeScrubLine = {
+        el: document.getElementById("volume-scrub-line"),
+        current: {
+            width: volumeTimeline.offsetWidth * localStorage.getItem(VOLUME) + 5
+        },
+    }
+    volumeScrubLine.el.style.width = volumeScrubLine.current.width + "px";
 
     // Add the user's playlists to the drop down menu.
     spotifyPlaylists(updateUserPlaylistsUI);
@@ -107,6 +136,8 @@ let spotifyShuffleState = false;
 let spotifyRepeatState = 0;
 // The total time in ms of the current track playing.
 let spotifyTrackTotalTime = 0;
+// The current position in ms of the track playing.
+let spotifyTrackPosition = 0;
 
 /*--------------------------------------------------------------------------*/
 /* SCRUB BAR VARIABLES */
@@ -114,6 +145,10 @@ let spotifyTrackTotalTime = 0;
 
 // State if the scrubber has been clicked.
 let scrubberClicked = false;
+// The interval that updates the scrubber.
+let scubberInterval = null;
+// State if the volume scrubber has been clicked.
+let volumeScrubberClicked = false;
 
 /*--------------------------------------------------------------------------*/
 /* CONSTANTS */
@@ -122,9 +157,7 @@ let scrubberClicked = false;
 // Names of the stored variables in localStorage.
 const ACCESS_TOKEN = "spotify_access_token";
 const REFRESH_TOKEN = "spotify_refresh_token";
-
-// Domains for our the backend and the frontend.
-const DOMAIN_BACKEND = "https://study-space-tamu.herokuapp.com";
+const VOLUME = "spotify_volume";
 
 /*--------------------------------------------------------------------------*/
 /* SPOTIFY PLAYER */
@@ -137,7 +170,8 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     // Create the Spotify Player Object.
     spotifyPlayer = new Spotify.Player({
       name: "Study Space Player",
-      getOAuthToken: callback => { callback(localStorage.getItem(ACCESS_TOKEN)); }
+      getOAuthToken: callback => { callback(localStorage.getItem(ACCESS_TOKEN)); },
+      volume: localStorage.getItem(VOLUME)
     });
 
     // Connect the Spotify Player.
@@ -149,7 +183,10 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     
     // Error handling
     spotifyPlayer.addListener("initialization_error", ({ message }) => { console.error(message); });
-    spotifyPlayer.addListener("authentication_error", ({ message }) => { console.error(message); });
+    spotifyPlayer.addListener("authentication_error", ({ message }) => {
+        console.error(message);
+        spotifyRefresh(); 
+    });
     spotifyPlayer.addListener("account_error", ({ message }) => { console.error(message); });
     spotifyPlayer.addListener("playback_error", ({ message }) => { console.error(message); });
     
@@ -180,6 +217,12 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         spotifyShuffleState = state.shuffle;
         // Set the global variable for total track time.
         spotifyTrackTotalTime = trackTime;
+        // Set the global variable for the position of the track.
+        spotifyTrackPosition = state.position;
+        
+        if (!isPaused && scubberInterval == null) {
+            scrubStart();
+        }
     });
     
     // Ready
@@ -197,7 +240,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 // Pause/play the current track being played.
 function playbackToggle() {
     spotifyPlayer.togglePlay().then(() => {
-        console.log("Toggled!");
+        scrubStop();
     });
 }
 
@@ -221,7 +264,7 @@ function playbackNext() {
  */
 function playbackSeek(seekTo) {
     spotifyPlayer.seek(seekTo).then(() => {
-        console.log("Seeked to (ms): " + seekTo + ", (s): " + seekTo / 1000);
+        playbackTimeLabel.innerHTML = formatTime(seekTo / 1000);
     });
 }
 
@@ -270,6 +313,16 @@ function playbackRepeat() {
         }
     }
     xmlHTTP.send();
+}
+
+/**
+ * Sets the volume of the playback.
+ * @param {number} volume The volume (decimal between 0 and 1)
+ */
+function playbackVolume(volume) {
+    spotifyPlayer.setVolume(volume).then(() => {
+        localStorage.setItem(VOLUME, volume);
+    });
 }
 
 /**
@@ -361,16 +414,6 @@ function spotifyPlay(uri) {
     xmlHTTP.send(body);
 }
 
-// Clears the access and refresh tokens from localStorage and redirects back to landing page.
-function spotifyLogout() {
-    // Wipe localStorage values.
-    localStorage.removeItem(ACCESS_TOKEN);
-    localStorage.removeItem(REFRESH_TOKEN);
-
-    // Redirect to landing page.
-    window.location.replace("./index.html");
-}
-
 /**
  * In order to refresh our access token, we must make a POST request to Spotify from our backend
  * since it involves sending our client ID and secret.
@@ -381,7 +424,7 @@ function spotifyLogout() {
  */
 function spotifyRefresh() {
     // Query parameters for making a request to the backend server.
-    const refreshEndpoint = DOMAIN_BACKEND + "/api/spotify/refresh/";
+    const refreshEndpoint = window.location.origin + "/api/spotify/refresh/";
     const refreshToken = localStorage.getItem(REFRESH_TOKEN);
 
     // Build the request URI.
@@ -410,23 +453,45 @@ function spotifyRefresh() {
 /* SCRUB BAR */
 /*--------------------------------------------------------------------------*/
 
-// Upon clicking the mouse on the scrubber.
-document.onmousemove = (e) => {
-    if (mouseDown == true) {
-        // The scubber itself has been clicked on, change the state.
-        scrubberClicked = true;
+function scrubStart() {
+    let updateInterval = 10;
+    scubberInterval = setInterval(() => {
+        spotifyTrackPosition += updateInterval;
+        
+        let timelineWidth = parseInt(getComputedStyle(timeline, 10).width, 10);
+        let newScrubPosition = spotifyTrackPosition / spotifyTrackTotalTime * timelineWidth;
+    
+        if (newScrubPosition > timelineWidth - 10) {
+            newScrubPosition = timelineWidth - 10;
+        }
+    
+        playbackTimeLabel.innerHTML = formatTime(spotifyTrackPosition / 1000);
+        updateScrubUI(newScrubPosition);
+    }, updateInterval);
+}
 
-        var scrubStyle = getComputedStyle(scrub.el),
+function scrubStop() {
+    clearInterval(scubberInterval);
+    scubberInterval = null;
+}
+
+// Upon clicking the mouse.
+document.onmousemove = (e) => {
+    if (scrubberClicked) {
+        // Kill the interval that is updating the scrubber while the mouse is down.
+        scrubStop();
+
+        let scrubStyle = getComputedStyle(scrub.el),
             position = parseInt(scrubStyle.left, 10),
             newPosition = position + (e.clientX - scrub.last.x),
             timeStyle = getComputedStyle(timeline, 10),
             timeWidth = parseInt(timeStyle.width, 10);
-
+        
         // If the scubber is trying to go negative, set it to 0.
         if (e.clientX < timeline.offsetLeft) {
             newPosition = 0;
         } else if (e.clientX > timeWidth + timeline.offsetLeft) {
-            newPosition = timeWidth;
+            newPosition = timeWidth - 10;
         }
 
         // Set the new x position in the scub object and visually move the scrubber to the new position.
@@ -437,13 +502,33 @@ document.onmousemove = (e) => {
         // Update the timeline to follow the scrubber.
         scrubLine.current.width = newPosition + 10;
         scrubLine.el.style.width = newPosition + 10 + "px";
+    } else if (volumeScrubberClicked) {
+        let volumeScrubStyle = getComputedStyle(volumeScrub.el),
+            position = parseInt(volumeScrubStyle.left, 10),
+            newPosition = position + (e.clientX - volumeScrub.last.x),
+            timeStyle = getComputedStyle(volumeTimeline, 10),
+            timeWidth = parseInt(timeStyle.width, 10);
+
+        // If the scubber is trying to go negative, set it to 0.
+        if (e.clientX < volumeTimeline.offsetLeft) {
+            newPosition = 0;
+        } else if (e.clientX > timeWidth + volumeTimeline.offsetLeft) {
+            newPosition = timeWidth;
+        }
+
+        // Set the new x position in the scub object and visually move the scrubber to the new position.
+        volumeScrub.current.x = newPosition;
+        volumeScrub.el.style.left = newPosition + "px";
+        volumeScrub.last.x = e.clientX;
+
+        // Update the timeline to follow the scrbber.
+        volumeScrubLine.current.width = newPosition + 5;
+        volumeScrubLine.el.style.width = newPosition + 5 + "px";
     }
 };
 
 // Releasing the mouse.
 document.onmouseup = () => {
-    mouseDown = false;
-
     // Used to only seek the playback when the mouse up event followed a mouse click on the actual scubber.
     if (scrubberClicked) {
         // Get the current position of the scrubber and the width of the timeline.
@@ -456,6 +541,17 @@ document.onmouseup = () => {
 
         // Change the state of the scubber clicked back to false.
         scrubberClicked = false;
+    } else if (volumeScrubberClicked) {
+        // Calculate the volume based on the position of the scrubber
+        let positionPX = volumeScrub.current.x;
+        let timelineWidth = parseInt(getComputedStyle(volumeTimeline, 10).width, 10);
+        let volume = positionPX / timelineWidth;
+
+        // Set the volume of the playback.
+        playbackVolume(volume);
+    
+        // Change the state of the volume scubber clicked back to false.
+        volumeScrubberClicked = false;
     }
 };
 
@@ -465,7 +561,7 @@ document.onmouseup = () => {
  */
 function updateScrubUI(pixel) {
     // Set the new x position in the scub object and visually move the scrubber to the new position.
-    scrub.last.x = scrub.current.x;
+    scrub.last.x = scrub.el.offsetLeft;
     scrub.current.x = pixel;
     scrub.el.style.left = pixel + "px";
 

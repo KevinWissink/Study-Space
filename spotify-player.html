@@ -7,8 +7,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://sdk.scdn.co/spotify-player.js; connect-src 'self' https://api.spotify.com; frame-src https://sdk.scdn.co; img-src 'self' https://i.scdn.co">
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script src="spotify-player.js"></script>
-    <script src="spotify-player-keyboard.js"></script>
-    <link rel="stylesheet" href="spotify-player-wide.css">
+    <link rel="stylesheet" href="spotify-player.css">
     <link rel="stylesheet" href="timer.css">
     <link rel="stylesheet" href="calendar.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -17,7 +16,6 @@
   <body>
     <h1>Welcome to Study Space!</h1>
 
-    <button id="spotify-start-button" class="button">Play Global Top 50</button>
     <!-- src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23ffffff&amp;ctz=America%2FChicago&amp;mode=AGENDA&amp;src=ZmFsbG91dGRheXNAZ21haWwuY29t&amp;color=%237986CB&amp;showPrint=0&amp;showTabs=1&amp;showTz=0&amp;showDate=0&amp;showNav=0&amp;showTitle=0" -->
 
     <div id="calendar">
@@ -46,34 +44,27 @@
     </div>
     
     <div id='spotify-player'>
-      <div id="playback-track-container">
-        <img id="playback-cover-image" src="default-cover-art.png" alt="Track cover art"> 
-        <div id="playback-info-container">
-          <h3 id="playback-track-label">Track name</h3>
-          <h4 id="playback-artist-label">Artist name</h4>
+      <img id="playback-cover-image" alt="Track cover art"> 
+      <h3 id="playback-track-label"></h3>
+      <h4 id="playback-artist-label"></h4>
+      <h6 id="playback-duration-label"></h6>
+      
+      <!-- Credit - codepen.io -->
+      <div id="scrub-bar">
+        <div id="timeline">
+          <div id="scrub"></div>
         </div>
       </div>
-      
-      <div id="playback-media-container">
-        <div id="playback-controls-container">
-          <button id="playback-shuffle-button" class="spotify-button material-icons">shuffle</button>
-          <button id="playback-previous-button" class="spotify-button material-icons">skip_previous</button>
-          <button id="playback-toggle-button" class="spotify-button material-icons">play_circle_outline</button>
-          <button id="playback-next-button" class="spotify-button material-icons">skip_next</button>
-          <button id="playback-repeat-button" class="spotify-button material-icons">repeat</button>
-          <br>
-        </div>
-        
-        <!-- Credit - codepen.io -->
-        <div id="scrub-bar">
-          <label id="playback-time-label">0:00</label>
-          <div id="timeline">
-            <div id="scrub-line">
-              <div id="scrub"></div>
-            </div>
-          </div>
-          <label id="playback-duration-label">4:20</label>
-        </div>
+
+      <div id="playback-controls-container">
+        <button id="playback-shuffle-button" class="button">Toggle Shuffle</button>
+        <button id="playback-repeat-button" class="button">Repeat</button>
+        <button id="spotify-start-button" class="button">Play Global Top 50</button>
+        <button id="playback-previous-button" class="button">Previous</button>
+        <button id="playback-toggle-button" class="button">Play/Pause</button>
+        <button id="playback-next-button" class="button">Next</button>
+        <button id="spotify-logout-button" class="button">Logout</button>
+        <button id="spotify-refresh-button" class="button">Refresh Token</button>
       </div>
 
       <div id="playback-playlists-container">

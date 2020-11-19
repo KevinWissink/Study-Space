@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Redirect the user to the main study page.
-    window.location.replace("./spotify-player.html");
+    window.location.replace("./study-space.html");
 });
 
 // Takes as parameter a URL and returns a JSON of the extracted query parameters.

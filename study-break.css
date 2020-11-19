@@ -1,92 +1,96 @@
-body, html {
-    height: 97.5vh;
+@import "theme.css";
+
+#main {
+    height: 100%;
+    width: auto;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
 }
 
 img {
-    height:100%;
+    height:85%;
     width:100%; 
     object-fit: contain;
 }
 
-* {
-    box-sizing: border-box;
-}
-
 .column {
-    float: left;
-    width: 50%;
-    padding: 1vh;
-    height:100%;
-    background-color:#bbb;
-}
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-primary);
 
-/* Clear floats after the columns */
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-.affirmation {
-    height: 47%;
-}
-
-#dog-column {
-    background-image: url('images/grass.jpg');
-    background-size: cover;
-}
-
-#dog-toolbar {
-    padding: 1vh;
     display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    padding: 2% 2%;
+}
+
+#nav-open-column {
+    width: min-content;
+    height: 100%;
+    background-color: var(--color-primary);
+}
+
+.row {
+    width: 100%;
+    height: 100%;
+
+    background-color: var(--color-secondary);
+    border: none;
+    border-radius: 1em;
+
+    padding: 0 1.5em 1.5em;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.container-label {
+    font-size: 2em;
+    user-select: none;
+}
+
+.break-button {
+    font-size: 1.3em;
+    width: 9em;
+    margin: 0.15em 0 0.3em;
+}
+
+.toolbar {
+    padding: 1% 1%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     justify-content: space-evenly;
 }
 
-#dog-image {
+#Slideshow {
     width: 100%;
-    height: 85%;
+    height: 80%;
 }
 
-#spotify-area{
-    background-color:#1DB954;
+.affirmation {
+    height: 43%;
 }
 
-/* The Modal (background) */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+#affirmation-result {
+    font-size: 1.5em;
+    margin-top: 1em;
+    opacity: 95%;
+    font-style: italic;
 }
 
-/* Modal Content/Box */
-.help-content {
-    background-color: #fefefe;
-    margin: 10% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-}
-
-/* The Close Button */
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+#spotify-container {
+    
 }
 
 input[type="submit"] {
@@ -94,4 +98,17 @@ input[type="submit"] {
     background: url('images/help-button-picture.png') no-repeat;
     width: 20px;
     height: 20px;
+}
+
+  /* Create an active/current tablink class */
+.tab button.active {
+    background-color: #ccc;
+}
+
+  /* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 10px;
+    width: 100%;
+    height: 80%;
 }

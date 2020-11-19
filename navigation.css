@@ -1,0 +1,312 @@
+@import "theme.css";
+
+.no-transition {
+    transition: none;
+}
+
+#side-navigation-bar {
+    position: fixed;
+    z-index: 1;
+
+    height: 100%;
+    width: 0;
+    display: flex;
+    flex-direction: column;
+
+    background-color: var(--color-secondary);
+    font-family: Circular, Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+#side-navigation-bar .nav-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#nav-top-buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+
+    padding: 10px 10px 0;
+}
+
+.navigation-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+#header-nav-open {
+    height: 100%;
+    padding: 0.4em 0.3em;
+    width: min-content;
+}
+
+#navigation-open-button {
+    font-size: 2.5em;
+    color: var(--color-tertiary);
+}
+
+#navigation-open-button:hover {
+    cursor: pointer;
+}
+
+#navigation-open-button:hover, #navigation-open-button:focus, #navigation-open-button:active {
+    color: var(--color-quaternary);
+    outline: none;
+}
+
+#navigation-close-button {
+    color: var(--color-tertiary);
+}
+
+#navigation-close-button:hover {
+    cursor: pointer;
+}
+
+#navigation-close-button:hover, #navigation-close-button:focus, #navigation-close-button:active {
+    color: var(--color-quaternary);
+    outline: none;
+}
+
+#navigation-title {
+    margin: 10px auto 15px;
+
+    color: var(--color-text);
+    font-size: 32px;
+    white-space: nowrap;
+
+    user-select: none;
+}
+
+.login-button {
+    height: 40px;
+    width: 180px;
+    margin: 10px auto;
+
+    border-radius: 20px;
+    cursor: pointer;
+    color: var(--color-text);
+    display: inline-block;
+    font-size: 16px;
+    font-family: Circular, Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+}
+
+.login-button:focus, .login-button:active {
+    outline: none;
+    box-shadow: 0 0 0 0.05em var(--color-text);
+}
+
+#spotify-login-button {
+    background-color: var(--color-spotify);
+    border: var(--color-spotify);
+}
+
+#spotify-login-button:hover {
+    background-color: var(--color-text);
+    color: var(--color-primary);
+}
+
+#google-login-button {
+    background-color: var(--color-google);
+    border: var(--color-google);
+    margin-bottom: 20px;
+}
+
+#google-login-button:hover {
+    background-color: var(--color-text);
+    color: var(--color-primary);
+}
+
+.page-button {
+    margin: 10px auto;
+
+    color: var(--color-tertiary);
+    opacity: 75%;
+    cursor: pointer;
+    display: block;
+    font-size: 22px;
+    text-decoration: none;
+    white-space: nowrap;
+
+    border: none;
+    border-radius: 1em;
+    padding: 0 0.5em;
+}
+
+.page-button:hover, .page-button:focus, .page-button:active {
+    outline: none;
+    color: var(--color-quaternary);
+    opacity: 100%;
+}
+
+#playlists-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto 0 20px 0;
+}
+
+#user-playlists-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 0 25px 0;
+}
+
+#preset-playlists-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.playlists-title {
+    margin: 0 0 10px 0;
+    font-weight: normal;
+    color: var(--color-text);
+    white-space: nowrap;
+    user-select: none;
+}
+
+.playlist-dropdown {
+    height: 20px;
+    width: 180px;
+}
+
+.nav-button {
+    height: 30px;
+    width: 85px;
+    margin: 10px auto;
+
+    border-radius: 20px;
+    cursor: pointer;
+    color: var(--color-text);
+    display: inline-block;
+    font-size: 16px;
+    font-family: Circular, Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+}
+
+.nav-button {
+    background-color: var(--color-button);
+    border: var(--color-button);
+}
+
+.nav-button:hover {
+    background-color: var(--color-text);
+    color: var(--color-primary);
+}
+
+.nav-button:focus, .nav-button:active {
+    outline: none;
+    box-shadow: 0 0 0 0.05em var(--color-text);
+}
+
+#change-theme {
+    width: 170px;
+}
+
+/*** Help Pop-up ***/
+#help-button {
+    color: var(--color-tertiary);
+    background-color: transparent;
+    border: none;
+
+    display: inline-block;
+    padding-top: 5px;
+
+    opacity: 60%;
+}
+
+#help-button:hover {
+    cursor: pointer;
+}
+
+#help-button:hover, #help-button:focus, #help-button:active {
+    color: var(--color-quaternary);
+    outline: none;
+    opacity: 90%;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 10; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: var(--color-primary); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.help-content {
+    z-index: inherit;
+    background-color: var(--color-secondary);
+    margin: 10.5% auto; /* 10% from the top and centered */
+    padding: 0.55em 0.9em;
+    padding-left: 2em;
+    border: none;
+    border-radius: 1em;
+    width: 80%; /* Could be more or less, depending on screen size */
+    font-size: 1.3em;
+}
+
+.help-label {
+    margin: 0.7em 0;
+    font-size: 1.2em;
+}
+
+/* close button */
+.close {
+    color: var(--color-tertiary);
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.close:hover {
+    cursor: pointer;
+}
+
+.close:hover, .close:focus, .close:active {
+    color: var(--color-quaternary);
+    outline: none;
+}
+
+.key {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    width: 4em;
+    margin-right: 1em;
+}
+
+.key kbd {
+    display: inline-block;
+    background-color: #1277d4;
+    border: 0.15em solid black;
+    color: white;
+    width: 1.45em;
+    height: 1.45em;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.space-kbd {
+    line-height: 80%;
+}
+.space-kbd > span {
+    font-size: 1.3em;
+}

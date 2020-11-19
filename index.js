@@ -1,3 +1,5 @@
+window.location.href = "./study-space.html";
+
 // Wait for the DOM to finish loading to add events for the buttons.
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("spotify-login-button").addEventListener("click", spotifyLogin);
@@ -5,8 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // The endpoint of the backend server to start the login process with Spotify.
-const SPOTIFY_LOGIN_ENDPOINT = "https://study-space-tamu.herokuapp.com/api/spotify/login";
-const GOOGLE_LOGIN_ENDPOINT = "https://study-space-tamu.herokuapp.com/api/google/login";
+const SPOTIFY_LOGIN_ENDPOINT = "http://localhost:3000/api/spotify/login";
+const GOOGLE_LOGIN_ENDPOINT = "http://localhost:3000/api/google/login";
 
 // Starts the login process when the login button is pressed.
 function spotifyLogin() {

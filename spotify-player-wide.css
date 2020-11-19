@@ -1,16 +1,18 @@
-#spotify-player {
-    position: fixed;
-    bottom: 0;
+@import "theme.css";
 
-    height: 9%;
-    width: 100%;
+#spotify-player {
+    height: 10%;
+    width: auto;
+    min-height: 88px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    z-index: 1;
 
-    background-color: #373737;
-    border: #252525 ;
-    color: white;
+    background-color: var(--color-secondary);
+    border-top: 2px solid var(--color-primary);
+    border-left: 2px solid var(--color-primary);
+    color: var(--color-text);
     font-family: Circular, Helvetica, Arial, sans-serif;
 }
 
@@ -22,14 +24,19 @@
 
     background-color: transparent;
     border: none;
-    color: lightgray;
+    color: var(--color-tertiary);
     font-size: 12px;
     outline: none;
     overflow: none;
 }
 
 .spotify-button:hover {
-    color: white;
+    cursor: pointer;
+}
+
+.spotify-button:hover, .spotify-button:focus, .spotify-button:active {
+    outline: none;
+    color: var(--color-quaternary);
 }
 
 #playback-toggle-button {
@@ -49,6 +56,7 @@
     height: 65%;
     margin-top: 100%;
     margin: auto 10px auto 15px;
+    user-select: none;
 }
 
 #playback-info-container {
@@ -62,20 +70,32 @@
 }
 
 #playback-track-label {
-    font-size: 14px;
+    color: var(--color-text);
     margin: 5px 0 0 0;
+    font-size: 16px;
+    white-space: nowrap;
 }
 
 #playback-artist-label {
-    color: gray;
-    font-size: 12px;
     margin: 10px 0 0 0;
+    color: var(--color-text);
+    opacity: 50%;
+    font-size: 13px;
+    white-space: nowrap;
 }
 
 #playback-media-container {
     width: 60%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+}
+
+#playback-controls-container {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
     justify-content: center;
 }
 
@@ -89,20 +109,20 @@
 
 #playback-time-label {
     padding: 0 15px 0 0;
-
-    font-size: 12px;
+    font-size: 13px;
+    transition: none;
 }
 
 #playback-duration-label {
     padding: 0 0 0 15px;
-
-    font-size: 12px;
+    font-size: 13px;
+    transition: none;
 }
 
 #timeline {
     width: 75%;
     height: 8px;
-    background-color:#252525;
+    background-color: var(--color-primary);
     border-radius: 10px;
 }
 
@@ -110,37 +130,81 @@
     height: 8px;
     width: 0px;
 
-    background-color: #1DB954;
+    background-color: var(--color-accent);
     border-radius: 10px;
 }
 
 #scrub {
     width: 20px;
     height: 20px;
-    background-color: #1DB954;
+    background-color: var(--color-accent);
     border-radius: 50%;
 
-    cursor: move;
+    cursor: ew-resize;
     position: relative;
     bottom: 5px;
-    left: -10px;
 }
 
 #scrub.active {
-    cursor: move;
+    cursor: ew-resize;
 }
 
-#playback-controls-container {
-    height: 50%;
-    width: 100%;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-}
-
-#playback-playlists-container {
+#playback-volume-container {
     width: 20%;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-around;
+}
+
+#volume-scrub-bar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#volume-down-label {
+    font-size: 19px;
+    padding: 0 10px 0 0;
+    transition: none;
+    user-select: none;
+}
+
+#volume-up-label {
+    font-size: 19px;
+    padding: 0 0 0 10px;
+    transition: none;
+    user-select: none;
+}
+
+#volume-timeline {
+    height: 8px;
+    width: 80px;
+    background-color: var(--color-primary);
+    border-radius: 10px;
+}
+
+#volume-scrub-line {
+    height: 8px;
+    width: 45px;
+
+    background-color: var(--color-accent);
+    border-radius: 10px;
+}
+
+#volume-scrub {
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-accent);
+    border-radius: 50%;
+
+    cursor: ew-resize;
+    position: relative;
+    left: 40px;
+    bottom: 1px;
+}
+
+#volume-scrub.active {
+    cursor: ew-resize;
 }

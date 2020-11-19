@@ -1,34 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <title>Study Space</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src-elem 'self' https://apis.google.com; frame-src 'self' https://accounts.google.com https://calendar.google.com">
-  <meta name="google-signin-scope" content="profile email">
-  <meta name="google-signin-client_id" content="study-space-tamu.apps.googleusercontent.com">
+  <head>
+    <title>Study Space</title>
+    <meta charset="UTF-8">
+    <link rel="icon" href="notebook.ico">
+    
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="study-space-tamu.apps.googleusercontent.com">
+    
+    <!-- Scripts -->
+    <script src="index.js"></script>
+    <srcipt src="googleCalendar.js"></srcipt>
+    <script src="settings.js"></script> <!-- settings.js must be last js listed -->
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="calendar.css">
+    <link rel="stylesheet" href="general.css"></link>
+  </head>
+
+  <body>
+    <button id="spotify-login-button" class="button">Spotify Login</button>
+    <button id="google-login-button" class="button">Google Login</button>
+  </body>
   
-  <script src="index.js"></script>
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-  <srcipt src="googleCalendar.js"></srcipt>
-
-  <link rel="icon" href="favicon.ico">
-  <link rel="stylesheet" href="calendar.css">
-</head>
-
-<body>
-  <button id="spotify-login-button">Spotify Login</button>
-  <button id="google-login-button">Google Login</button>
-  <!-- <button class="button" type="button" onclick="googleCalendar.js">Login</button> -->
-  <!-- <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div> -->
-  <!-- <script>
-    function addButton() {
-      document.getElementById("addForm").style.display = "block";
-    }
-  </script> -->
-
-</body>
-
 </html>

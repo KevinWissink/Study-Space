@@ -1,67 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <title>Study Break</title>
+    <meta charset="UTF-8">
+    <link rel="icon" href="notebook.ico">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://cors-anywhere.herokuapp.com; img-src 'self' https://images.dog.ceo">
-  <link rel="stylesheet" href="study-break.css">
-  <script src="study-break-scripts.js"></script>
-  <script src="study-break-modal.js"></script>
+  <!-- Content Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://cors-anywhere.herokuapp.com https://api.spotify.com; font-src 'self' https://fonts.gstatic.com;
+      frame-src 'self' https://sdk.scdn.co; img-src 'self' https://images.dog.ceo https://i.scdn.co; script-src 'self' https://sdk.scdn.co/spotify-player.js; style-src-elem 'self' https://fonts.googleapis.com;">
+
+  <!-- Scripts -->
   <script src="study-break-keyboard.js"></script>
+  <script src="help-modal.js"></script>
+  <!--<script src="study-break-modal.js"></script>-->
+  <script src="spotify-player.js"></script>
+  <script src="study-break-scripts.js"></script>
+  <script src="study-break-tabs.js"></script>
+  <script src="navigation.js"></script>
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+  <script src="settings.js"></script> <!-- settings.js must be last js listed -->
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="general.css">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="navigation.css">
+  <link rel="stylesheet" href="spotify-player.css">
+  <link rel="stylesheet" href="study-break.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
 <body>
-  <!-- Dog API Area -->
-  <div class="column" id= dog-column>
-    <h2>Dog API</h2>
-    <div class="row" id="dog-toolbar">
-      <button id="dog-fetch" accesskey="a">Fetch!</button>
-      <button id="dog-breed">By Breed</button>
-      <button id="dog-fav">Favorite</button>
+  <!---------- NAVIGATION BAR ---------->
+  <div id="side-navigation-bar">
+    <div id="nav-top-buttons">
+      <button id="help-button" type="submit">
+        <span class="material-icons">help_outline</span>
+      </button>
+      <div id="help-box" class="modal">
+        <div class="help-content">
+          <span class="close material-icons">close</span>
+          <div id="help-text"></div>
+        </div>
+      </div>
+
+      <button id="navigation-close-button" class="navigation-button material-icons">close</button>
     </div>
-    <div class="row" id="dog-image">
-      <img id="dog-result">
+
+    <h1 id="navigation-title">📓 Study Space</h1>
+
+    <!-- Website pages -->
+    <div id="pages-container" class="nav-container">
+      <a id="study-space-button" class="page-button">Study Space</a>
+      <a id="study-break-button" class="page-button">Study Break</a>
+    </div>
+
+    <!-- Settings -->
+    <div id="settings-container" class="nav-container">
+      <button id="change-theme" class="nav-button">Change Theme</button>
+    </div>
+    
+    <!-- Spotify playlists -->
+    <div id="playlists-container" class="nav-container">
+      <div id="user-playlists-container">
+        <h3 id="user-playlists-title" class="playlists-title">Your Playlists</h3>
+        <select id="user-playlists-select" class="playlist-dropdown"></select>
+        <button id="user-playlists-button" class="nav-button">Play</button>
+      </div>
+      <div id="preset-playlists-container">
+        <h3 id="user-playlists-title" class="playlists-title">Study Playlists</h3>
+        <select id="preset-playlists-select" class="playlist-dropdown">
+          <option value="spotify:playlist:37i9dQZF1DX8NTLI2TtZa6">Intense Studying</option>
+          <option value="spotify:playlist:37i9dQZF1DX9sIqqvKsjG8">Instrumental Study</option>
+          <option value="spotify:playlist:4hI41e14omQt1xZBA4M1ID">Lofi Hip Hop Study Beats</option>
+        </select>
+        <button id="preset-playlists-button" class="nav-button">Play</button>
+      </div>
+    </div>
+
+    <!-- Login/logout Google and Spotify -->
+    <div id="login-container" class="nav-container">
+      <button id="spotify-login-button" class="login-button"></button>
+      <button id="google-login-button" class="login-button"></button>
     </div>
   </div>
 
-  <!-- Right side Column for Afirmations and Spotify-->
-  <div class="column" id=afirmation-column>
-    <!-- Afirmation API Area-->
-    <div class="affirmation row">
-      <h2>Affirmation API</h2>
-      <button id="affirmation-button">Inspire</button>
-      
-      <!-- help box content-->
-      <input id="help-button" type="submit" value="">
-      <!--<button id="help-button" type="submit" style="border: 0; background: transparent">
-        <img src="/images/help-button-picture.png" alt="help"/>
-      </button>-->
-      <div id="help-box" class="modal">
-        <div class="help-content">
-          <span class="close">&times;</span>
-          <h4>Spotify Keyboard Commands</h4>
-          <p>&#91;&uarr;&#93; ... Increase Volume</p>
-          <p>&#91;&darr;&#93; ... Decrease Volume</p>
-          <p>&#91;&larr;&#93; ... Previous Song</p>
-          <p>&#91;&rarr;&#93; ... Skip Song</p>
-          <h4>Study Break Keyboard Commands</h4>
-          <p>&#91;F Key&#93; ... Fetch Dog</p>
-          <p>&#91;B Key&#93; ... By Breed</p>
-          <p>&#91;V Key&#93; ... Favorite Dog</p>
-          <p>&#91;I Key&#93; ... Inspire Me</p>
+  <!---------- MAIN ---------->
+  <div id="main">
+    <div id= nav-open-column>
+      <div id="header-nav-open">
+        <button id="navigation-open-button" class="navigation-button material-icons">menu</button>
+      </div>
+    </div>
+  
+      <!-- Dog API Area -->
+    <div class="column" id= dog-column>
+      <div class="row" id="dog-row">
+        <h2 class="container-label">Cute Dogs 🐶</h2>
+        <!-- Tab links -->
+        <div class="tab toolbar" id="dog-toolbar">
+          <button class="button break-button tablinks" id="slideshow-tab">slideshow</button>
+          <button class="button break-button tablinks" id="breed-tab">breeds</button>
+          <button class="button break-button tablinks" id="favorite-tab">Favorites</button>
         </div>
 
+        <!-- Tab content -->
+        <div class="tabcontent" id="slideshow">
+          <div class="toolbar">
+            <div>
+              <input type="checkbox" id="slideshow-checkbox" name="slideshow-checkbox" checked>
+              <label for="slideshow-checkbox"> slideshow</label>
+            </div>
+            <button class="button break-button" id="slideshow-fetch-button">Fetch</button>
+          </div>
+        </div>
+
+        <div class="tabcontent" id="breeds">
+          <div class="toolbar">
+            <select id="breed-selector">
+              <option value="affenpinscher">affenpinscher</option>
+              <option value="african">african</option>
+              <option value="airedale">airedale</option>
+              <option value="akita">akita</option>
+              <option value="appenzeller">appenzeller</option>
+              <option value="australian-shepherd">shepherd australian</option>
+              <option value="basenji">basenji</option>
+              <option value="beagle">beagle</option>
+              <option value="bluetick">bluetick</option>
+              <option value="borzoi">borzoi</option>
+              <option value="bouvier">bouvier</option>
+              <option value="boxer">boxer</option>
+              <option value="brabancon">brabancon</option>
+              <option value="briard">briard</option>
+              <option value="buhund-norwegian">norwegian buhund</option>
+              <option value="bulldog-boston">boston bulldog</option>
+              <option value="bulldog-english">english bulldog</option>
+              <option value="bulldog-french">french bulldog</option>
+              <option value="bullterrier-staffordshire">staffordshire bullterrier</option>
+              <option value="cairn">cairn</option>
+              <option value="cattledog-australian">australian cattledog</option>
+              <option value="chihuahua">chihuahua</option>
+              <option value="chow">chow</option>
+              <option value="clumber">clumber</option>
+              <option value="cockapoo">cockapoo</option>
+              <option value="collie-border">border collie</option>
+              <option value="coonhound">coonhound</option>
+              <option value="corgi-cardigan">cardigan corgi</option>
+              <option value="cotondetulear">cotondetulear</option>
+              <option value="dachshund">dachshund</option>
+              <option value="dalmatian">dalmatian</option>
+              <option value="dane-great">great dane</option>
+              <option value="deerhound-scottish">scottish deerhound</option>
+              <option value="dhole">dhole</option>
+              <option value="dingo">dingo</option>
+              <option value="doberman">doberman</option>
+              <option value="elkhound-norwegian">norwegian elkhound</option>
+              <option value="entlebucher">entlebucher</option>
+              <option value="eskimo">eskimo</option>
+              <option value="finnish-lapphund">lapphund finnish</option>
+              <option value="frise-bichon">bichon frise</option>
+              <option value="germanshepherd">germanshepherd</option>
+              <option value="greyhound-italian">italian greyhound</option>
+              <option value="groenendael">groenendael</option>
+              <option value="havanese">havanese</option>
+              <option value="hound-afghan">afghan hound</option>
+              <option value="hound-basset">basset hound</option>
+              <option value="hound-blood">blood hound</option>
+              <option value="hound-english">english hound</option>
+              <option value="hound-ibizan">ibizan hound</option>
+              <option value="hound-plott">plott hound</option>
+              <option value="hound-walker">walker hound</option>
+              <option value="husky">husky</option>
+              <option value="keeshond">keeshond</option>
+              <option value="kelpie">kelpie</option>
+              <option value="komondor">komondor</option>
+              <option value="kuvasz">kuvasz</option>
+              <option value="labrador">labrador</option>
+              <option value="leonberg">leonberg</option>
+              <option value="lhasa">lhasa</option>
+              <option value="malamute">malamute</option>
+              <option value="malinois">malinois</option>
+              <option value="maltese">maltese</option>
+              <option value="mastiff-bull">bull mastiff</option>
+              <option value="mastiff-english">english mastiff</option>
+              <option value="mastiff-tibetan">tibetan mastiff</option>
+              <option value="mexicanhairless">mexicanhairless</option>
+              <option value="mix">mix</option>
+              <option value="mountain-bernese">bernese mountain</option>
+              <option value="mountain-swiss">swiss mountain</option>
+              <option value="newfoundland">newfoundland</option>
+              <option value="otterhound">otterhound</option>
+              <option value="ovcharka-caucasian">caucasian ovcharka</option>
+              <option value="papillon">papillon</option>
+              <option value="pekinese">pekinese</option>
+              <option value="pembroke">pembroke</option>
+              <option value="pinscher-miniature">miniature pinscher</option>
+              <option value="pitbull">pitbull</option>
+              <option value="pointer-german">german pointer</option>
+              <option value="pointer-germanlonghair">germanlonghair pointer</option>
+              <option value="pomeranian">pomeranian</option>
+              <option value="poodle-miniature">miniature poodle</option>
+              <option value="poodle-standard">standard poodle</option>
+              <option value="poodle-toy">toy poodle</option>
+              <option value="pug">pug</option>
+              <option value="puggle">puggle</option>
+              <option value="pyrenees">pyrenees</option>
+              <option value="redbone">redbone</option>
+              <option value="retriever-chesapeake">chesapeake retriever</option>
+              <option value="retriever-curly">curly retriever</option>
+              <option value="retriever-flatcoated">flatcoated retriever</option>
+              <option value="retriever-golden">golden retriever</option>
+              <option value="ridgeback-rhodesian">rhodesian ridgeback</option>
+              <option value="rottweiler">rottweiler</option>
+              <option value="saluki">saluki</option>
+              <option value="samoyed">samoyed</option>
+              <option value="schipperke">schipperke</option>
+              <option value="schnauzer-giant">giant schnauzer</option>
+              <option value="schnauzer-miniature">miniature schnauzer</option>
+              <option value="setter-english">english setter</option>
+              <option value="setter-gordon">gordon setter</option>
+              <option value="setter-irish">irish setter</option>
+              <option value="sheepdog-english">english sheepdog</option>
+              <option value="sheepdog-shetland">shetland sheepdog</option>
+              <option value="shiba">shiba</option>
+              <option value="shihtzu">shihtzu</option>
+              <option value="spaniel-blenheim">blenheim spaniel</option>
+              <option value="spaniel-brittany">brittany spaniel</option>
+              <option value="spaniel-cocker">cocker spaniel</option>
+              <option value="spaniel-irish">irish spaniel</option>
+              <option value="spaniel-japanese">japanese spaniel</option>
+              <option value="spaniel-sussex">sussex spaniel</option>
+              <option value="spaniel-welsh">welsh spaniel</option>
+              <option value="springer-english">english springer</option>
+              <option value="stbernard">stbernard</option>
+              <option value="terrier-american">american terrier</option>
+              <option value="terrier-australian">australian terrier</option>
+              <option value="terrier-bedlington">bedlington terrier</option>
+              <option value="terrier-border">border terrier</option>
+              <option value="terrier-dandie">dandie terrier</option>
+              <option value="terrier-fox">fox terrier</option>
+              <option value="terrier-irish">irish terrier</option>
+              <option value="terrier-kerryblue">kerryblue terrier</option>
+              <option value="terrier-lakeland">lakeland terrier</option>
+              <option value="terrier-norfolk">norfolk terrier</option>
+              <option value="terrier-norwich">norwich terrier</option>
+              <option value="terrier-patterdale">patterdale terrier</option>
+              <option value="terrier-russell">russell terrier</option>
+              <option value="terrier-scottish">scottish terrier</option>
+              <option value="terrier-sealyham">sealyham terrier</option>
+              <option value="terrier-silky">silky terrier</option>
+              <option value="terrier-tibetan">tibetan terrier</option>
+              <option value="terrier-toy">toy terrier</option>
+              <option value="terrier-westhighland">westhighland terrier</option>
+              <option value="terrier-wheaten">wheaten terrier</option>
+              <option value="terrier-yorkshire">yorkshire terrier</option>
+              <option value="vizsla">vizsla</option>
+              <option value="waterdog-spanish">spanish waterdog</option>
+              <option value="weimaraner">weimaraner</option>
+              <option value="whippet">whippet</option>
+              <option value="wolfhound-irish">irish wolfhound</option>
+            </select>
+            <button class="button break-button" id="breeds-fetch-button">Fetch</button><br>
+          </div>
+          <img id="breeds-img">
+        </div>
+
+        <div class="tabcontent" id="Favorites">
+          <img id="Favorites-img">
+        </div>
       </div>
-      <p id="affirmation-result">Have a Wonderful day</p>
     </div>
 
-    <!-- Spotify API Area-->
-    <div class="affirmation row" id="spotify-area">
-      <h2>Spotify API</h2>
-      <a>this is where the Spotify player goes</a>
+    <!-- Right side Column for Afirmations and Spotify -->
+    <div class="column" id=affirmation-column>
+      <!-- Afirmation API Area -->
+      <div class="affirmation row" id="affirmation-container">
+        <h2 class="container-label">Encouraging Affirmations 🤗</h2>
+        <button id="affirmation-button" class="button break-button">Inspire</button>
+        <p id="affirmation-result"></p>
+      </div>
+
+      <!-- Spotify API Area-->
+      <div class="affirmation row" id="spotify-container">
+        <div id='spotify-player'>
+          <div id="playback-track-container">
+            <img id="playback-cover-image" src="default-cover-art.png" alt="Track cover art"> 
+            <div id="playback-info-container">
+              <h3 id="playback-track-label">Track name</h3>
+              <h4 id="playback-artist-label">Artist name</h4>
+            </div>
+          </div>
+          
+          <div id="playback-media-container">
+            <div id="playback-controls-container">
+              <button id="playback-shuffle-button" class="spotify-button material-icons">shuffle</button>
+              <button id="playback-previous-button" class="spotify-button material-icons">skip_previous</button>
+              <button id="playback-toggle-button" class="spotify-button material-icons">play_circle_outline</button>
+              <button id="playback-next-button" class="spotify-button material-icons">skip_next</button>
+              <button id="playback-repeat-button" class="spotify-button material-icons">repeat</button>
+              <br>
+            </div>
+            <div id="scrub-bar">
+              <label id="playback-time-label">0:00</label>
+              <div id="timeline">
+                <div id="scrub-line">
+                  <div id="scrub"></div>
+                </div>
+              </div>
+              <label id="playback-duration-label">4:20</label>
+            </div>
+          </div>
+    
+          <div id="playback-volume-container">
+            <div id="volume-scrub-bar">
+              <label id="volume-down-label" class="material-icons">volume_down</label>
+              <div id="volume-timeline">
+                <div id="volume-scrub-line">
+                  <div id="volume-scrub"></div>
+                </div>
+              </div>
+              <label id="volume-up-label" class="material-icons">volume_up</label>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </body>
-
+  
 </html>
