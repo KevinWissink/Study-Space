@@ -1,12 +1,21 @@
 // Variables for UI elements.
-var navigationOpenButton = null;
-var navigationCloseButton = null;
+var navigationToggleButton = null;
 
 var googleConnectButton = null;
 var spotifyConnectButton = null;
 
 // Wait for the DOM to finish loading to add events for the buttons.
 document.addEventListener("DOMContentLoaded", () => {
+    // The following two sections of code handle the opening and closing of the side navigation menu.
+    navigationToggleButton = document.getElementById("navigation-open-button");
+    navigationToggleButton.onclick = openNav;
+
+    document.getElementById("study-break-button").href = "./study-break.html";
+    document.getElementById("study-space-button").href = "./study-space.html";
+    
+    googleConnectButton = document.getElementById("google-login-button");
+    spotifyConnectButton = document.getElementById("spotify-login-button");
+    
     // check if nav bar should already be open
     if (sessionStorage.getItem('nav-open') === null) {
         sessionStorage.setItem('nav-open', 'false');
@@ -21,23 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
         navBar.classList.remove('no-transition');
         main.classList.remove('no-transition');
     }
-
-    // The following two sections of code handle the opening and closing of the side navigation menu.
-    navigationOpenButton = document.getElementById("navigation-open-button");
-    navigationOpenButton.addEventListener("click", openNav);
-
-    navigationCloseButton = document.getElementById("navigation-close-button");
-    navigationCloseButton.addEventListener("click", closeNav);
-
-    document.getElementById("study-break-button").href = "./study-break.html";
-    document.getElementById("study-space-button").href = "./study-space.html";
-
-    googleConnectButton = document.getElementById("google-login-button");
-    spotifyConnectButton = document.getElementById("spotify-login-button");
     
     // Check if the user has already logged into Spotify or Google.
     if (localStorage.hasOwnProperty("google_access_token")) {
-        googleConnectButton.innerHTML = "Log Out of Google";
+        googleConnectButton.innerHTML = "Logout of Google";
         googleConnectButton.addEventListener("click", googleLogout);
     } else {
         googleConnectButton.innerHTML = "Connect to Google";
@@ -45,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (localStorage.hasOwnProperty("spotify_access_token")) {
-        spotifyConnectButton.innerHTML = "Log Out of Spotify";
+        spotifyConnectButton.innerHTML = "Logout of Spotify";
         spotifyConnectButton.addEventListener("click", spotifyLogout);
     } else {
         spotifyConnectButton.innerHTML = "Connect to Spotify";
@@ -106,6 +102,8 @@ function openNav() {
     document.getElementById("main").style.marginLeft = 250 + "px";
     // update session storage with nav change
     sessionStorage.setItem('nav-open', 'true');
+    // Set the hamburger button to now close the navigation bar.
+    navigationToggleButton.onclick = closeNav;
 }
 
 function closeNav() {
@@ -115,4 +113,6 @@ function closeNav() {
     document.getElementById("main").style.marginLeft = 0;
     // update session storage with nav change
     sessionStorage.setItem('nav-open', 'false');
+    // Set the hamburger button to now open the navigation bar.
+    navigationToggleButton.onclick = openNav;
 }

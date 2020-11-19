@@ -23,8 +23,8 @@ let volumeScrub = null;
 // Wait for the DOM to finish loading to add events for the buttons.
 document.addEventListener("DOMContentLoaded", () => {
     // If there is no volume value in cache, set it to default of 50%.
-    if (!localStorage.hasOwnProperty(VOLUME)) {
-        localStorage.setItem(VOLUME, 0.5);
+    if (!localStorage.hasOwnProperty(VOLUME_KEY)) {
+        localStorage.setItem(VOLUME_KEY, 0.5);
     }
 
     playbackCoverImage = document.getElementById("playback-cover-image");
@@ -87,15 +87,16 @@ document.addEventListener("DOMContentLoaded", () => {
         },
     }
     volumeTimeline = document.getElementById("volume-timeline");
+    console.log(volumeTimeline.clientWidth);
 
     // Create the volume scrub object.
     volumeScrub = {
         el: document.getElementById("volume-scrub"),
         current: {
-            x: volumeTimeline.offsetWidth * localStorage.getItem(VOLUME)
+            x: volumeTimeline.clientWidth * localStorage.getItem(VOLUME_KEY)
         },
         last: {
-            x: volumeTimeline.offsetWidth * localStorage.getItem(VOLUME)
+            x: volumeTimeline.clientWidth * localStorage.getItem(VOLUME_KEY)
         }
     }
     volumeScrub.el.style.left = volumeScrub.current.x + "px";
@@ -111,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
     volumeScrubLine = {
         el: document.getElementById("volume-scrub-line"),
         current: {
-            width: volumeTimeline.offsetWidth * localStorage.getItem(VOLUME) + 5
+            width: volumeTimeline.clientWidth * localStorage.getItem(VOLUME_KEY) + 5
         },
     }
     volumeScrubLine.el.style.width = volumeScrubLine.current.width + "px";
@@ -155,13 +156,25 @@ let volumeScrubberClicked = false;
 /*--------------------------------------------------------------------------*/
 
 // Names of the stored variables in localStorage.
-const ACCESS_TOKEN = "spotify_access_token";
-const REFRESH_TOKEN = "spotify_refresh_token";
-const VOLUME = "spotify_volume";
+const ACCESS_TOKEN_KEY = "spotify_access_token";
+const REFRESH_TOKEN_KEY = "spotify_refresh_token";
+const VOLUME_KEY = "spotify_volume";
 
 /*--------------------------------------------------------------------------*/
 /* SPOTIFY PLAYER */
 /*--------------------------------------------------------------------------*/
+
+// Always refresh the access tokens when the page has loaded.
+if (localStorage.hasOwnProperty(REFRESH_TOKEN_KEY)) {
+    spotifyRefresh();
+}
+
+// Every 30 minutes, refresh the access token.
+setInterval(() => {
+    if (localStorage.hasOwnProperty(REFRESH_TOKEN_KEY)) {
+        spotifyRefresh();
+    }
+}, 1800000)
 
 /**
  * Once the Playback SDK is ready, this method will execute.
@@ -170,8 +183,8 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     // Create the Spotify Player Object.
     spotifyPlayer = new Spotify.Player({
       name: "Study Space Player",
-      getOAuthToken: callback => { callback(localStorage.getItem(ACCESS_TOKEN)); },
-      volume: localStorage.getItem(VOLUME)
+      getOAuthToken: callback => { callback(localStorage.getItem(ACCESS_TOKEN_KEY)); },
+      volume: localStorage.getItem(VOLUME_KEY)
     });
 
     // Connect the Spotify Player.
@@ -205,22 +218,25 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         let trackTime = item.duration_ms;
         let coverURL = item.album.images[2].url;
 
-        // If the player is paused (false) or playing (true).
-        let isPaused = state.paused;
-
-        // Update the playback UI.
-        upadtePlaybackUI(track, artist, trackTime, coverURL, isPaused);
-
         // Global variable for paused state.
-        spotifyIsPausedState = isPaused;
+        spotifyIsPausedState = state.paused;
         // Update the shuffle state of the player.
         spotifyShuffleState = state.shuffle;
+        // The repeat mode.
+        spotifyRepeatState - state.repeat_mode;
         // Set the global variable for total track time.
         spotifyTrackTotalTime = trackTime;
         // Set the global variable for the position of the track.
         spotifyTrackPosition = state.position;
+
+        // Update the playback UI.
+        upadtePlaybackUI(track, artist, coverURL);
         
-        if (!isPaused && scubberInterval == null) {
+        if (spotifyIsPausedState) {
+            scrubStop();
+        }
+
+        if (!spotifyIsPausedState && scubberInterval == null) {
             scrubStart();
         }
     });
@@ -240,7 +256,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 // Pause/play the current track being played.
 function playbackToggle() {
     spotifyPlayer.togglePlay().then(() => {
-        scrubStop();
+        
     });
 }
 
@@ -278,7 +294,7 @@ function playbackShuffle() {
 
     let xmlHTTP = new XMLHttpRequest();
     xmlHTTP.open("PUT", shuffleQuery, true);
-    xmlHTTP.setRequestHeader("Authorization", "Bearer " + localStorage.getItem(ACCESS_TOKEN));
+    xmlHTTP.setRequestHeader("Authorization", "Bearer " + localStorage.getItem(ACCESS_TOKEN_KEY));
     xmlHTTP.onreadystatechange = () => {
         if (xmlHTTP.readyState == 4 && xmlHTTP.status == 204) {
             // Upon success, toggle the local shuffle state.
@@ -306,7 +322,7 @@ function playbackRepeat() {
 
     let xmlHTTP = new XMLHttpRequest();
     xmlHTTP.open("PUT", repeatQuery, true);
-    xmlHTTP.setRequestHeader("Authorization", "Bearer " + localStorage.getItem(ACCESS_TOKEN));
+    xmlHTTP.setRequestHeader("Authorization", "Bearer " + localStorage.getItem(ACCESS_TOKEN_KEY));
     xmlHTTP.onreadystatechange = () => {
         if (xmlHTTP.readyState == 4 && xmlHTTP.status == 204) {
             spotifyRepeatState = (spotifyRepeatState + 1) % 3;
@@ -321,7 +337,7 @@ function playbackRepeat() {
  */
 function playbackVolume(volume) {
     spotifyPlayer.setVolume(volume).then(() => {
-        localStorage.setItem(VOLUME, volume);
+        localStorage.setItem(VOLUME_KEY, volume);
     });
 }
 
@@ -329,20 +345,34 @@ function playbackVolume(volume) {
  * Updates the playback UI after the playback state has been changed.
  * @param {string} track Title of the track being played. 
  * @param {string} artist Name of the artist. If multiple, each separated by a comma.
- * @param {number} trackTime The total time of the track in ms.
  * @param {string} coverURL The URL of the track cover art.
- * @param {boolean} isPaused True if the player is paused, false if the playback is playing.
  */
-function upadtePlaybackUI(track, artist, trackTime, coverURL, isPaused) {
+function upadtePlaybackUI(track, artist, coverURL) {
     playbackTrackLabel.innerHTML = track;
     playbackArtistLabel.innerHTML = artist;
-    playbackDurationLabel.innerHTML = formatTime(trackTime / 1000);
+    playbackDurationLabel.innerHTML = formatTime(spotifyTrackTotalTime / 1000);
     playbackCoverImage.src = coverURL;
 
-    if (isPaused) {
+    if (spotifyIsPausedState) {
         playbackToggleButton.innerHTML = "play_circle_outline";
     } else {
         playbackToggleButton.innerHTML = "pause_circle_outline";
+    }
+
+    if (spotifyShuffleState) {
+        playbackShuffleButton.style.color = getComputedStyle(document.body).getPropertyValue("--color-button");
+    } else {
+        playbackShuffleButton.style.color = getComputedStyle(document.body).getPropertyValue("--color-tertiary");
+    }
+
+    if (spotifyRepeatState == 0) {
+        playbackRepeatButton.style.color = getComputedStyle(document.body).getPropertyValue("--color-tertiary");
+        playbackRepeatButton.innerHTML = "repeat";
+    } else if (spotifyRepeatState == 1) {
+        playbackRepeatButton.style.color = getComputedStyle(document.body).getPropertyValue("--color-button");
+    } else if (spotifyRepeatState == 2) {
+        playbackRepeatButton.style.color = getComputedStyle(document.body).getPropertyValue("--color-button");
+        playbackRepeatButton.innerHTML = "repeat_one";
     }
 }
 
@@ -376,7 +406,7 @@ function spotifyPlaylists(callback) {
             
     let xmlHTTP = new XMLHttpRequest();
     xmlHTTP.open("GET", playlistsQuery, true);
-    xmlHTTP.setRequestHeader("Authorization", "Bearer " + localStorage.getItem(ACCESS_TOKEN));
+    xmlHTTP.setRequestHeader("Authorization", "Bearer " + localStorage.getItem(ACCESS_TOKEN_KEY));
     xmlHTTP.onreadystatechange = () => {
         if (xmlHTTP.readyState == 4 && xmlHTTP.status == 200) {
             callback(JSON.parse(xmlHTTP.response).items);
@@ -405,7 +435,7 @@ function spotifyPlay(uri) {
 
     let xmlHTTP = new XMLHttpRequest();
     xmlHTTP.open("PUT", playQuery, true);
-    xmlHTTP.setRequestHeader("Authorization", "Bearer " + localStorage.getItem(ACCESS_TOKEN));
+    xmlHTTP.setRequestHeader("Authorization", "Bearer " + localStorage.getItem(ACCESS_TOKEN_KEY));
     xmlHTTP.onreadystatechange = () => {
         if (xmlHTTP.readyState == 4 && xmlHTTP.status == 204) {
             console.log("Playing!");
@@ -425,7 +455,7 @@ function spotifyPlay(uri) {
 function spotifyRefresh() {
     // Query parameters for making a request to the backend server.
     const refreshEndpoint = window.location.origin + "/api/spotify/refresh/";
-    const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+    const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
 
     // Build the request URI.
     const refreshQuery = refreshEndpoint + 
@@ -438,11 +468,11 @@ function spotifyRefresh() {
             // Upon receiving a response, store the new access token.
             let response = JSON.parse(xmlHTTP.responseText);
             console.log(response);
-            localStorage.setItem(ACCESS_TOKEN, response.access_token);
+            localStorage.setItem(ACCESS_TOKEN_KEY, response.access_token);
 
             // Sometimes we will also get a new refresh token from Spotify, if so store the new refresh token.
             if (response.hasOwnProperty("refresh_token")) {
-                localStorage.setItem(REFRESH_TOKEN, response.refresh_token);
+                localStorage.setItem(REFRESH_TOKEN_KEY, response.refresh_token);
             }
         }
     }

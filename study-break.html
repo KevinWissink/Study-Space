@@ -10,17 +10,6 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://cors-anywhere.herokuapp.com https://api.spotify.com; font-src 'self' https://fonts.gstatic.com;
       frame-src 'self' https://sdk.scdn.co; img-src 'self' https://images.dog.ceo https://i.scdn.co; script-src 'self' https://sdk.scdn.co/spotify-player.js; style-src-elem 'self' https://fonts.googleapis.com;">
 
-  <!-- Scripts -->
-  <script src="study-break-keyboard.js"></script>
-  <script src="help-modal.js"></script>
-  <!--<script src="study-break-modal.js"></script>-->
-  <script src="spotify-player.js"></script>
-  <script src="study-break-scripts.js"></script>
-  <script src="study-break-tabs.js"></script>
-  <script src="navigation.js"></script>
-  <script src="https://sdk.scdn.co/spotify-player.js"></script>
-  <script src="settings.js"></script> <!-- settings.js must be last js listed -->
-
   <!-- CSS -->
   <link rel="stylesheet" href="general.css">
   <link rel="stylesheet" href="theme.css">
@@ -28,6 +17,17 @@
   <link rel="stylesheet" href="spotify-player.css">
   <link rel="stylesheet" href="study-break.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <!-- Scripts -->
+  <script src="help-modal.js"></script>
+  <script src="navigation.js"></script>
+  <script src="spotify-player.js"></script>
+  <script src="study-break-keyboard.js"></script>
+  <!--<script src="study-break-modal.js"></script>-->
+  <script src="study-break-scripts.js"></script>
+  <script src="study-break-tabs.js"></script>
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+  <script src="settings.js"></script> <!-- settings.js must be last js listed -->
 </head>
 
 <body>
@@ -43,8 +43,6 @@
           <div id="help-text"></div>
         </div>
       </div>
-
-      <button id="navigation-close-button" class="navigation-button material-icons">close</button>
     </div>
 
     <h1 id="navigation-title">📓 Study Space</h1>
