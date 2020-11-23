@@ -141,7 +141,7 @@ app.get("/api/google/login/", (req, res) => {
     let authEndpoint = "https://accounts.google.com/o/oauth2/v2/auth";
     let clientID = process.env.GOOGLE_CLIENT_ID;
     let responseType = "code";
-    let scopes = "https://www.googleapis.com/auth/calendar";
+    let scopes = "https://www.googleapis.com/auth/calendar https://mail.google.com/";
     let accessType = "offline";
 
     // Build the authorization endpoint.
