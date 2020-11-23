@@ -13,6 +13,8 @@
     border-left: 2px solid var(--color-primary);
     color: var(--color-text);
     font-family: Circular, Helvetica, Arial, sans-serif;
+
+    z-index: 1;
 }
 
 .spotify-button {
