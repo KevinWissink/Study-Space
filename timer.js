@@ -358,4 +358,5 @@ function deleteTimer(delButton)
 function createBreakTimer(totalSecs)
 {
     sessionStorage.setItem("break-timer", totalSecs);
+    document.getElementById("study-break-button").click();
 }

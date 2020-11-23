@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("slideshow-tab").addEventListener("click", function(){openTab('slideshow-tab', 'slideshow')});
     document.getElementById("breed-tab").addEventListener("click", function(){openTab('breed-tab', 'breeds')});
-    document.getElementById("favorite-tab").addEventListener("click", function(){openTab('favorite-tab', 'Favorites')});
+    //document.getElementById("favorite-tab").addEventListener("click", function(){openTab('favorite-tab', 'Favorites')});
 
     document.getElementById("slideshow-tab").click();
 });

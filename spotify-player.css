@@ -55,6 +55,7 @@
     width: 150px;
     margin-top: 100%;
     margin: 15px;
+    margin-right: 5px;
     user-select: none;
 }
 
@@ -71,13 +72,13 @@
 #playback-track-label {
     color: var(--color-text);
     font-size: 26px;
-    margin: 5px 0 0 5px;
+    margin: 5px 0 0 0px;
 }
 
 #playback-artist-label {
     color: var(--color-text);
     font-size: 22px;
-    margin: 10px 0 0 8px;
+    margin: 10px 0 0 3px;
     opacity: 50%;
 }
 

@@ -12,6 +12,8 @@
     width: 0;
     display: flex;
     flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
 
     background-color: var(--color-secondary);
     font-family: Circular, Helvetica, Arial, sans-serif;
@@ -21,15 +23,17 @@
 #side-navigation-bar .nav-container {
     display: flex;
     flex-direction: column;
+    text-align: center;
 }
 
-#nav-top-buttons {
+#nav-top {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: nowrap;
     justify-content: space-between;
 
-    padding: 10px 10px 0;
+    padding: 0 0 0;
+    text-align: center;
 }
 
 .navigation-button {
@@ -73,16 +77,14 @@
 }
 
 #navigation-title {
-    margin: 10px auto 15px;
+    margin: 5px auto 5px;
 
     color: var(--color-text);
     font-size: 32px;
     white-space: nowrap;
-
-    user-select: none;
 }
 
-.login-button {
+.settings-button {
     height: 40px;
     width: 180px;
     margin: 10px auto;
@@ -96,9 +98,18 @@
     font-weight: bold;
     text-align: center;
     text-decoration: none;
+
+    color: var(--color-text);
+    background-color: var(--color-button);
+    border: var(--color-button);
 }
 
-.login-button:focus, .login-button:active {
+.settings-button:hover {
+    background-color: var(--color-text);
+    color: var(--color-primary);
+}
+
+.settings-button:focus, .settings-button:active {
     outline: none;
     box-shadow: 0 0 0 0.05em var(--color-text);
 }
@@ -108,20 +119,10 @@
     border: var(--color-spotify);
 }
 
-#spotify-login-button:hover {
-    background-color: var(--color-text);
-    color: var(--color-primary);
-}
-
 #google-login-button {
     background-color: var(--color-google);
     border: var(--color-google);
     margin-bottom: 20px;
-}
-
-#google-login-button:hover {
-    background-color: var(--color-text);
-    color: var(--color-primary);
 }
 
 .page-button {
@@ -150,7 +151,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: auto 0 20px 0;
 }
 
 #user-playlists-container {
@@ -169,9 +169,9 @@
 .playlists-title {
     margin: 0 0 10px 0;
     font-weight: normal;
+    font-size: 20px;
     color: var(--color-text);
     white-space: nowrap;
-    user-select: none;
 }
 
 .playlist-dropdown {
@@ -186,16 +186,14 @@
 
     border-radius: 20px;
     cursor: pointer;
-    color: var(--color-text);
     display: inline-block;
     font-size: 16px;
     font-family: Circular, Helvetica, Arial, sans-serif;
     font-weight: bold;
     text-align: center;
     text-decoration: none;
-}
 
-.nav-button {
+    color: var(--color-text);
     background-color: var(--color-button);
     border: var(--color-button);
 }
@@ -210,8 +208,21 @@
     box-shadow: 0 0 0 0.05em var(--color-text);
 }
 
-#change-theme {
-    width: 170px;
+#settings-container {
+}
+
+#settings-header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    text-align: center;
+    padding-right: 38px;
+}
+
+#settings-title {
+    font-size: 22px;
+    display: inline;
 }
 
 /*** Help Pop-up ***/
@@ -220,8 +231,7 @@
     background-color: transparent;
     border: none;
 
-    display: inline-block;
-    padding-top: 5px;
+    padding-bottom: 10px;
 
     opacity: 60%;
 }
@@ -240,7 +250,7 @@
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 100 !important; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -252,15 +262,16 @@
 
 /* Modal Content/Box */
 .help-content {
-    z-index: inherit;
+    z-index: 100 !important;
     background-color: var(--color-secondary);
     margin: 10.5% auto; /* 10% from the top and centered */
     padding: 0.55em 0.9em;
     padding-left: 2em;
     border: none;
     border-radius: 1em;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 50%; /* Could be more or less, depending on screen size */
     font-size: 1.3em;
+    overflow: auto;
 }
 
 .help-label {

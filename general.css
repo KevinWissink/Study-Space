@@ -162,8 +162,8 @@ input::-ms-placeholder {
 }
 
 .checkbox-label .checkmark:after {
-    left: 0.31em;
-    top: 0;
+    left: 0.33em;
+    top: 0.09em;
     width: 0.3em;
     height: 0.6em;
     border: solid var(--color-text);

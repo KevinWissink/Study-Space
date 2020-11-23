@@ -49,14 +49,19 @@ img {
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: flex-start;
-
-    overflow-x: hidden;
-    overflow-y: auto;
 }
 
 .container-label {
     font-size: 2em;
     user-select: none;
+}
+
+#checkbox {
+    padding-top: 0.5em;
+}
+
+label {
+    font-size: 1.3em;
 }
 
 .break-button {
@@ -78,8 +83,23 @@ img {
     height: 80%;
 }
 
-.affirmation {
-    height: 43%;
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 10px;
+    width: 100%;
+    height: 75%;
+}
+
+#affirmation-container {
+    height: 33%;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 #affirmation-result {
@@ -90,25 +110,75 @@ img {
 }
 
 #spotify-container {
-    
+    height: 33%;
 }
 
-input[type="submit"] {
-    border: 0;
-    background: url('images/help-button-picture.png') no-repeat;
-    width: 20px;
-    height: 20px;
+/*** TIMER AREA ***/
+#timer-container {
+    height: 28%;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
-  /* Create an active/current tablink class */
-.tab button.active {
-    background-color: #ccc;
+#timer-label {
+    margin-bottom: 0.5em;
 }
 
-  /* Style the tab content */
-.tabcontent {
-    display: none;
-    padding: 10px;
+#active-timer-menu {
+    margin-left: auto;
+    margin-right: auto;
     width: 100%;
-    height: 80%;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: space-between;
+
+    color: var(--color-text);
+    font-size: 1.5em;
+    opacity: 95%;
+    font-style: italic;
+}
+
+#timer-div {
+    width: 100%;
+}
+
+#timer-values {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: space-between;
+    width: auto;
+    margin: 0 20%;
+
+    font-size: 2.2em;
+    opacity: 95%;
+}
+
+#timer-values.timeout {
+    color: var(--color-accent);
+    animation: opacityPulse 1s ease-out;
+    animation-iteration-count: infinite;
+}
+@keyframes opacityPulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+#return-button {
+    margin-top: 4%;
+    width: 18em;
 }

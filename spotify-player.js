@@ -178,71 +178,73 @@ setInterval(() => {
 /**
  * Once the Playback SDK is ready, this method will execute.
  */
-window.onSpotifyWebPlaybackSDKReady = () => {
-    // Create the Spotify Player Object.
-    spotifyPlayer = new Spotify.Player({
-      name: "Study Space Player",
-      getOAuthToken: callback => { callback(localStorage.getItem(ACCESS_TOKEN_KEY)); },
-      volume: localStorage.getItem(VOLUME_KEY)
-    });
-
-    // Connect the Spotify Player.
-    spotifyPlayer.connect().then(success => {
-        if (success) {
-            console.log("Spotify Player connected!");
-        }
-    });
+if (localStorage.hasOwnProperty(REFRESH_TOKEN_KEY)) {
+    window.onSpotifyWebPlaybackSDKReady = () => {
+        // Create the Spotify Player Object.
+        spotifyPlayer = new Spotify.Player({
+          name: "Study Space Player",
+          getOAuthToken: callback => { callback(localStorage.getItem(ACCESS_TOKEN_KEY)); },
+          volume: localStorage.getItem(VOLUME_KEY)
+        });
     
-    // Error handling
-    spotifyPlayer.addListener("initialization_error", ({ message }) => { console.error(message); });
-    spotifyPlayer.addListener("authentication_error", ({ message }) => {
-        console.error(message);
-        spotifyRefresh(); 
-    });
-    spotifyPlayer.addListener("account_error", ({ message }) => { console.error(message); });
-    spotifyPlayer.addListener("playback_error", ({ message }) => { console.error(message); });
-    
-    // Playback status updates
-    spotifyPlayer.addListener("player_state_changed", (state) => {
-        // Set the global variable for total track time.
-        spotifyTrackTotalTime = state.track_window.current_track.duration_ms;
-        // Set the global variable for the position of the track.
-        spotifyTrackPosition = state.position;
+        // Connect the Spotify Player.
+        spotifyPlayer.connect().then(success => {
+            if (success) {
+                console.log("Spotify Player connected!");
+            }
+        });
         
-        // Stop the scrub animation if the playback is paused. If it is not, start the animation.
-        if (state.paused) {
-            scrubStop();
-        } else if (scubberInterval == null) {
-            scrubStart();
-        }
-
-        // Store the current playback state in session storage.
-        sessionStorage.setItem(CONTEXT_KEY, state.context.uri);
-        sessionStorage.setItem(TRACK_URI_KEY, state.track_window.current_track.uri);
-        sessionStorage.setItem(POSITION_KEY, state.position);
-        sessionStorage.setItem(PAUSED_KEY, state.paused);
-        sessionStorage.setItem(SHUFFLE_KEY, state.shuffle);
-        sessionStorage.setItem(REPEAT_KEY, state.repeat_mode);
+        // Error handling
+        spotifyPlayer.addListener("initialization_error", ({ message }) => { console.error(message); });
+        spotifyPlayer.addListener("authentication_error", ({ message }) => {
+            console.error(message);
+            spotifyRefresh(); 
+        });
+        spotifyPlayer.addListener("account_error", ({ message }) => { console.error(message); });
+        spotifyPlayer.addListener("playback_error", ({ message }) => { console.error(message); });
         
-        updatePlaybackUI();
-    });
+        // Playback status updates
+        spotifyPlayer.addListener("player_state_changed", (state) => {
+            // Set the global variable for total track time.
+            spotifyTrackTotalTime = state.track_window.current_track.duration_ms;
+            // Set the global variable for the position of the track.
+            spotifyTrackPosition = state.position;
+            
+            // Stop the scrub animation if the playback is paused. If it is not, start the animation.
+            if (state.paused) {
+                scrubStop();
+            } else if (scubberInterval == null) {
+                scrubStart();
+            }
     
-    // Ready
-    spotifyPlayer.addListener("ready", ({ device_id }) => {
-        console.log("Ready with Device ID", device_id);
-        spotifyPlayerID = device_id;
-
-        // Once the player is ready, recover the playback state if there is one.
-        if (sessionStorage.hasOwnProperty(CONTEXT_KEY)) {
-            spotifyPlayPreviousState();
-        }
-    });
-  
-    // Not Ready
-    spotifyPlayer.addListener("not_ready", ({ device_id }) => {
-      console.log("Device ID has gone offline", device_id);
-    });
-};
+            // Store the current playback state in session storage.
+            sessionStorage.setItem(CONTEXT_KEY, state.context.uri);
+            sessionStorage.setItem(TRACK_URI_KEY, state.track_window.current_track.uri);
+            sessionStorage.setItem(POSITION_KEY, state.position);
+            sessionStorage.setItem(PAUSED_KEY, state.paused);
+            sessionStorage.setItem(SHUFFLE_KEY, state.shuffle);
+            sessionStorage.setItem(REPEAT_KEY, state.repeat_mode);
+            
+            updatePlaybackUI();
+        });
+        
+        // Ready
+        spotifyPlayer.addListener("ready", ({ device_id }) => {
+            console.log("Ready with Device ID", device_id);
+            spotifyPlayerID = device_id;
+    
+            // Once the player is ready, recover the playback state if there is one.
+            if (sessionStorage.hasOwnProperty(CONTEXT_KEY)) {
+                spotifyPlayPreviousState();
+            }
+        });
+      
+        // Not Ready
+        spotifyPlayer.addListener("not_ready", ({ device_id }) => {
+          console.log("Device ID has gone offline", device_id);
+        });
+    };
+}
 
 // Pause/play the current track being played.
 function playbackToggle() {

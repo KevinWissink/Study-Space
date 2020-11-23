@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("help-text").innerHTML = 
         '<h4 class="help-label">Spotify Keyboard Shortcuts</h4>' +
-        '<p><span class="key">⬆️</span>Increase Volume</p>' +
-        '<p><span class="key">⬇️</span>Decrease Volume</p>' +
         '<p><span class="key">⬅️</span>Previous Song</p>' +
         '<p><span class="key">➡️</span>Skip Song</p>' +
         '<p><span class="key"><kbd class="space-kbd"><span>␣</span></kbd></span>Pause Song</p>' +
@@ -26,15 +24,10 @@ document.onkeydown = (keyDownEvent) => {
             document.getElementById("playback-next-button").click();
         }
 
-        if (keyDownEvent.key == "ArrowUp") {//inc volume
-        }
-
-        if (keyDownEvent.key == "ArrowDown") {//dec volume
-        }
-
         if (keyDownEvent.key == " ") {//play/pause
             document.getElementById("playback-toggle-button").focus();
             document.getElementById("playback-toggle-button").click();
+            document.getElementById("playback-toggle-button").blur();
         }
 
         if (keyDownEvent.key == "s") {//study break

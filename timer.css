@@ -4,11 +4,16 @@
 
 /***** GENERAL TIMER MENU *****/
 div#timer-menu {
-    height: 100%;
+    height: auto;
     width: 26%;
     text-align: center;
     padding: 0.1em 0;
     
+    flex: display;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+
     background-color: var(--color-secondary);
     color: var(--color-text);
 
@@ -81,6 +86,10 @@ div#add-timer-menu > div, div#active-timer-menu > div {
 }
 
 /***** ADD TIMER SUB-MENU *****/
+div#add-timer-menu-container {
+    
+}
+
 #add-timer-menu-title {
     margin-bottom: -0.2em;
 }
@@ -182,11 +191,17 @@ div#add-timer-menu > div > label.checkbox-label {
 
 
 /***** ACTIVE TIMER SUB-MENU *****/
+div#active-timer-menu-container {
+    height: auto;
+    flex-grow: 1;
+}
+
 div#active-timer-menu {
     overflow-x: auto;
     overflow-y: auto;
     margin-bottom: 1em;
     height: auto;
+    flex-grow: 1;
 }
 
 div#active-timer-menu > div {

@@ -18,9 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
     dogImg.id = "slideshow-img";
     initialImgLoaded = false;
 
-    //fetch_dog();
     handleSlides(document.getElementById("slideshow-checkbox"));
     fetch_affirmation();
+    fetch_dog();
     fetch_breed();
 });
 
@@ -50,7 +50,7 @@ function fetch_dog(){
 
 function fetch_breed(){
     var e = document.getElementById("breed-selector");
-    var breed = e.options[e.selectedIndex].text;
+    var breed = e.options[e.selectedIndex].value;
     console.log(breed);
     burl = burl_1 + breed + burl_2
     fetch(proxyurl + burl)
@@ -63,7 +63,7 @@ function fetch_breed(){
 }
 
 function handleSlides(cb){
-    if(cb.checked == true){
+    if(cb.checked == true && document.getElementById("slideshow-tab").classList.contains('active')){
         fetch_dog()
         setTimeout(function(){handleSlides(cb)}, 5000);
     }
